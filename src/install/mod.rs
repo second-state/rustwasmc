@@ -146,7 +146,7 @@ fn prebuilt_url(tool: &Tool, version: &str) -> Result<String, failure::Error> {
         Tool::WasmBindgen => {
             Ok(format!(
                 "https://github.com/second-state/wasm-bindgen/releases/download/{0}/wasm-bindgen-{0}-{1}.tar.gz",
-                version,
+                format!("{}{}", version, "-ssvm"),
                 target
             ))
         },
