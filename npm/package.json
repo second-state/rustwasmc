@@ -1,0 +1,34 @@
+{
+  "name": "ssvmup",
+  "version": "0.1.0",
+  "description": "SSVM ready tool",
+  "main": "binary.js",
+  "scripts": {
+    "postinstall": "node ./install.js",
+    "preuninstall": "node ./uninstall.js"
+  },
+  "bin": {
+    "wasm-pack": "./run.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/second-state/ssvmup.git"
+  },
+  "keywords": [
+    "wasm",
+    "registry",
+    "cli",
+    "rust",
+    "npm",
+    "package"
+  ],
+  "author": "wangshishuo <wangshishuo@gmail.com>",
+  "license": "MIT OR Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/second-state/ssvmup/issues"
+  },
+  "homepage": "https://github.com/second-state/ssvmup#readme",
+  "dependencies": {
+    "binary-install": "0.0.1"
+  }
+}
