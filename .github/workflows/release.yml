@@ -1,0 +1,105 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      run: |
+        cd crates/cli
+        cargo build --release
+    - name: Get the tag name
+      id: tag_name
+      run: echo ::set-output name=version::${GITHUB_REF/refs\/tags\//}
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@latest
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ steps.tag_name.outputs.version }}
+        draft: false
+        prerelease: false
+    - shell: bash
+      run: |
+        tar -C ./target/release -czf ./output.tar.gz ssvmup
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        asset_path: ./output.tar.gz
+        asset_name: ssvmup-${{ steps.tag_name.outputs.version }}-x86_64-unknown-linux-gnu.tar.gz
+        asset_content_type: application/octet-stream
+    - shell: bash
+      run: |
+        echo "${{ steps.create_release.outputs.upload_url }}" > upload_url.txt
+    - name: Upload artifact
+      uses: actions/upload-artifact@v1
+      with:
+        name: release
+        path: upload_url.txt
+  update_assets:
+    name: Update Assets
+    needs: [ release ]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [windows-latest, macOS-latest]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build
+      run: |
+        cd crates/cli
+        cargo build --release
+    - name: Get the tag name
+      shell: bash
+      id: tag_name
+      run: echo ::set-output name=version::${GITHUB_REF/refs\/tags\//}
+    - name: Download artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: release
+    - name: get upload url
+      shell: bash
+      id: upload_url
+      run: echo ::set-output name=url::$(cat release/upload_url.txt)
+    - name: .exe ext for windows
+      shell: bash
+      if: runner.os == 'Windows'
+      run: |
+        mv target/release/ssvmup target/release/ssvmup.exe
+        tar -C ./target/release -czf ./output.tar.gz ssvmup.exe
+    - shell: bash
+      if: runner.os == 'macOS'
+      run: |
+        tar -C ./target/release -czf ./output.tar.gz ssvmup
+    - name: Upload Release Asset
+      if: runner.os == 'macOS'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.upload_url.outputs.url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        asset_path: ./output.tar.gz
+        asset_name: ssvmup-${{ steps.tag_name.outputs.version }}-x86_64-apple-darwin.tar.gz
+        asset_content_type: application/octet-stream
+    - name: Upload Release Asset
+      if: runner.os == 'Windows'
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.upload_url.outputs.url }} # This pulls from the CREATE RELEASE step above, referencing it's ID to get its outputs object, which include a `upload_url`. See this blog post for more info: https://jasonet.co/posts/new-features-of-github-actions/#passing-data-to-future-steps 
+        asset_path: ./output.tar.gz
+        asset_name: ssvmup-${{ steps.tag_name.outputs.version }}-x86_64-pc-windows-msvc.tar.gz
+        asset_content_type: application/octet-stream
