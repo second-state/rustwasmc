@@ -28,7 +28,9 @@ jobs:
         prerelease: false
     - shell: bash
       run: |
-        tar -C ./target/release -czf ./output.tar.gz ssvmup
+        mkdir ssvmup-${{ steps.tag_name.outputs.version }}-x86_64-unknown-linux-gnu
+        cp ./target/release/ssvmup ssvmup-${{ steps.tag_name.outputs.version }}-x86_64-unknown-linux-gnu
+        tar -czf ./output.tar.gz ssvmup-${{ steps.tag_name.outputs.version }}-x86_64-unknown-linux-gnu
     - name: Upload Release Asset
       uses: actions/upload-release-asset@v1
       env:
@@ -73,12 +75,15 @@ jobs:
       shell: bash
       if: runner.os == 'Windows'
       run: |
-        mv target/release/ssvmup target/release/ssvmup.exe
-        tar -C ./target/release -czf ./output.tar.gz ssvmup.exe
+        mkdir ssvmup-${{ steps.tag_name.outputs.version }}-x86_64-pc-windows-msvc
+        mv ./target/release/ssvmup ssvmup-${{ steps.tag_name.outputs.version }}-x86_64-pc-windows-msvc/ssvmup.exe
+        tar -czf ./output.tar.gz ssvmup-${{ steps.tag_name.outputs.version }}-x86_64-pc-windows-msvc
     - shell: bash
       if: runner.os == 'macOS'
       run: |
-        tar -C ./target/release -czf ./output.tar.gz ssvmup
+        mkdir ssvmup-${{ steps.tag_name.outputs.version }}-x86_64-apple-darwin
+        cp ./target/release/ssvmup ssvmup-${{ steps.tag_name.outputs.version }}-x86_64-apple-darwin
+        tar -czf ./output.tar.gz ssvmup-${{ steps.tag_name.outputs.version }}-x86_64-apple-darwin
     - name: Upload Release Asset
       if: runner.os == 'macOS'
       uses: actions/upload-release-asset@v1
