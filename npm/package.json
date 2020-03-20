@@ -8,7 +8,7 @@
     "preuninstall": "node ./uninstall.js"
   },
   "bin": {
-    "wasm-pack": "./run.js"
+    "ssvmup": "./run.js"
   },
   "repository": {
     "type": "git",

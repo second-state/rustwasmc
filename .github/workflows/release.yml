@@ -71,12 +71,11 @@ jobs:
       shell: bash
       id: upload_url
       run: echo ::set-output name=url::$(cat release/upload_url.txt)
-    - name: .exe ext for windows
-      shell: bash
+    - shell: bash
       if: runner.os == 'Windows'
       run: |
         mkdir ssvmup-${{ steps.tag_name.outputs.version }}-x86_64-pc-windows-msvc
-        mv ./target/release/ssvmup ssvmup-${{ steps.tag_name.outputs.version }}-x86_64-pc-windows-msvc/ssvmup.exe
+        mv ./target/release/ssvmup.exe ssvmup-${{ steps.tag_name.outputs.version }}-x86_64-pc-windows-msvc
         tar -czf ./output.tar.gz ssvmup-${{ steps.tag_name.outputs.version }}-x86_64-pc-windows-msvc
     - shell: bash
       if: runner.os == 'macOS'
