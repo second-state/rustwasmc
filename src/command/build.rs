@@ -14,6 +14,7 @@ use lockfile::Lockfile;
 use log::info;
 use manifest;
 use readme;
+use std::fs;
 use std::path::PathBuf;
 use std::time::Instant;
 use PBAR;
@@ -61,7 +62,7 @@ pub struct BuildOptions {
     /// Sets steps to be run. [possible values: no-install, normal, force]
     pub mode: InstallMode,
 
-    #[structopt(long = "no-typescript")]
+    #[structopt(skip = true)]
     /// By default a *.d.ts file is generated for the generated JS file, but
     /// this flag will disable generating this TypeScript file.
     pub disable_dts: bool,
@@ -98,11 +99,11 @@ impl Default for BuildOptions {
             path: None,
             scope: None,
             mode: InstallMode::default(),
-            disable_dts: false,
+            disable_dts: true,
             dev: false,
             release: false,
             profiling: false,
-            out_dir: String::new(),
+            out_dir: String::from("pkg"),
             out_name: None,
             extra_options: Vec::new(),
         }
@@ -171,6 +172,17 @@ impl Build {
             emoji::PACKAGE,
             self.out_dir.display()
         ));
+        Ok(())
+    }
+
+    /// Execute the "clean" command
+    pub fn clean() -> Result<(), Error> {
+        let bo = BuildOptions::default();
+        let b = Build::try_from_opts(bo)?;
+        info!("Removing the {} directory...", b.out_dir.display());
+        fs::remove_dir_all(b.out_dir)?;
+        info!("Removing the {} directory...", b.crate_data.target_directory().display());
+        fs::remove_dir_all(b.crate_data.target_directory())?;
         Ok(())
     }
 

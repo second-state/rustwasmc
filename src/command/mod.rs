@@ -15,6 +15,10 @@ pub enum Command {
     /// 🏗️  build your npm package!
     #[structopt(name = "build")]
     Build(BuildOptions),
+
+    /// clean the pkg and target dir
+    #[structopt(name = "clean")]
+    Clean{},
 }
 
 /// Run a command with the given logger!
@@ -25,6 +29,9 @@ pub fn run_ssvmup(command: Command) -> result::Result<(), Error> {
         Command::Build(build_opts) => {
             info!("Running build command...");
             Build::try_from_opts(build_opts).and_then(|mut b| b.run())
+        }
+        Command::Clean{} => {
+            Build::clean()
         }
     }
 }
