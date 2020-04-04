@@ -84,7 +84,7 @@ pub fn find_wasm_opt(cache: &Cache, install_permitted: bool) -> Result<WasmOpt, 
     };
     let url = format!(
         "https://github.com/WebAssembly/binaryen/releases/download/{vers}/binaryen-{vers}-{target}.tar.gz",
-        vers = "version_78",
+        vers = "version_90",
         target = target,
     );
 
