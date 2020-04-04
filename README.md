@@ -1,22 +1,19 @@
 <div align="center">
 
-  <h1>SsvmUp</h1>
+  <h1>ssvmup</h1>
 
   <p>
-    <strong>SSVM ready tool</strong>
+    <strong>The Second State VM ready tool</strong>
   </p>
 </div>
 
 ## About
 
-This tool seeks to be a one-stop shop for building and working with rust-
-generated WebAssembly that you would like to interop with JavaScript in [SSVM].
-
-[SSVM]: https://github.com/second-state/SSVM
+A one-stop tool for building Rust functions into WebAssembly (the [Second State VM, or SSVM](https://github.com/second-state/SSVM)) and then accessing these functions from Node.js JavaScript.
 
 ## Acknowledgment
 
-Most of the code for this project comes from [wasm-pack].
+This project is derived from the open source [wasm-pack].
 
 [wasm-pack]: https://github.com/rustwasm/wasm-pack
 
