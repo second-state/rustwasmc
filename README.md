@@ -7,7 +7,11 @@
   </p>
 </div>
 
+![npm](https://img.shields.io/npm/v/ssvmup)
 ![npm](https://img.shields.io/npm/dt/ssvmup)
+![GitHub language count](https://img.shields.io/github/languages/count/second-state/ssvmup)
+![GitHub top language](https://img.shields.io/github/languages/top/second-state/ssvmup)
+![Twitter Follow](https://img.shields.io/twitter/follow/secondstateinc?style=social)
 
 ## About
 
