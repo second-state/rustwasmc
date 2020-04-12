@@ -7,6 +7,8 @@
   </p>
 </div>
 
+![npm](https://img.shields.io/npm/dt/ssvmup)
+
 ## About
 
 A one-stop tool for building Rust functions into WebAssembly (the [Second State VM, or SSVM](https://github.com/second-state/SSVM)) and then accessing these functions from Node.js JavaScript.
