@@ -1,7 +1,5 @@
 <div align="center">
-
   <h1>ssvmup</h1>
-
   <p>
     <strong>The Second State VM ready tool</strong>
   </p>
@@ -11,7 +9,6 @@
 ![npm](https://img.shields.io/npm/dt/ssvmup)
 ![GitHub language count](https://img.shields.io/github/languages/count/second-state/ssvmup)
 ![GitHub top language](https://img.shields.io/github/languages/top/second-state/ssvmup)
-![Twitter Follow](https://img.shields.io/twitter/follow/secondstateinc?style=social)
 
 ## About
 
