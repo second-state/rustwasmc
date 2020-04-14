@@ -10,7 +10,7 @@
 ![GitHub language count](https://img.shields.io/github/languages/count/second-state/ssvmup)
 ![GitHub top language](https://img.shields.io/github/languages/top/second-state/ssvmup)
 
-Developers: [Getting started](https://docs.secondstate.io/server-side-webassembly/webassembly-on-the-server-side) building Rust + JavaScript hybrid apps for Node.js using the `ssvmup` tool.
+Developers: [Getting started](https://cloud.secondstate.io/server-side-webassembly/getting-started) building Rust + JavaScript hybrid apps for Node.js using the `ssvmup` tool.
 
 ## About
 
