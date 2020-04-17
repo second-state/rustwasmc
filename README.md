@@ -16,15 +16,19 @@ Developers: [Getting started](https://cloud.secondstate.io/server-side-webassemb
 
 A one-stop tool for building Rust functions into WebAssembly (the [Second State VM, or SSVM](https://github.com/second-state/SSVM)) and then accessing these functions from Node.js JavaScript.
 
-## Acknowledgment
-
-This project is derived from the open source [wasm-pack].
-
-[wasm-pack]: https://github.com/rustwasm/wasm-pack
-
 ## Install
 
+From Linux command line
+
+```
 curl https://raw.githubusercontent.com/second-state/ssvmup/master/installer/init.sh -sSf | sh
+```
+
+From NPM and Node.js
+
+```
+npm i ssvmup
+```
 
 ## Commands
 
@@ -41,3 +45,9 @@ RUST_LOG=info ssvmup build
 ```
 
 [`env_logger`]: https://crates.io/crates/env_logger
+
+## Acknowledgment
+
+This project is derived from the open source [wasm-pack].
+
+[wasm-pack]: https://github.com/rustwasm/wasm-pack
