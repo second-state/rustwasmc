@@ -32,7 +32,7 @@ npm i ssvmup
 
 ## Commands
 
-- `build`: Generate an npm wasm pkg from a rustwasm crate
+- `build`: Compile and generate the wasm file, and the corresponding JavaScript file to call wasm functions from JavaScript
 
 ## Logging
 
