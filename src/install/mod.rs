@@ -14,6 +14,9 @@ use std::process::Command;
 use target;
 use which::which;
 use PBAR;
+use semver::Version;
+use curl::easy::Easy;
+use serde_json::Value;
 
 mod krate;
 mod mode;
@@ -142,11 +145,14 @@ fn prebuilt_url(tool: &Tool, version: &str) -> Result<String, failure::Error> {
         bail!("Unrecognized target!")
     };
 
+    let semv = Version::parse(version).unwrap();
+    let ssvm_ver = get_ssvm_ver(&format!("{}.{}", semv.major, semv.minor)).unwrap();
+
     match tool {
         Tool::WasmBindgen => {
             Ok(format!(
                 "https://github.com/second-state/wasm-bindgen/releases/download/{0}/wasm-bindgen-{0}-{1}.tar.gz",
-                format!("{}{}", version, "+ssvm"),
+                ssvm_ver,
                 target
             ))
         },
@@ -157,6 +163,27 @@ fn prebuilt_url(tool: &Tool, version: &str) -> Result<String, failure::Error> {
                 target
             ))
         }
+    }
+}
+
+fn get_ssvm_ver(bindgen_semver: &str) -> Result<String, failure::Error> {
+    let mut handle = Easy::new();
+    let mut vers = String::new();
+
+    handle.url("https://raw.githubusercontent.com/second-state/wasm-bindgen/ssvm/bindgen-ssvm-vers.json").unwrap();
+    {
+        let mut transfer = handle.transfer();
+        transfer.write_function(|data| {
+            vers = String::from_utf8(data.to_vec()).unwrap();
+            Ok(data.len())
+        }).unwrap();
+        transfer.perform().unwrap();
+    }
+
+    let vers: Value = serde_json::from_str(&vers).unwrap();
+    match &vers[bindgen_semver] {
+        Value::String(sv) => Ok(sv.to_string()),
+        _ => bail!("no ssvm mapping for bindgen {}", bindgen_semver)
     }
 }
 
