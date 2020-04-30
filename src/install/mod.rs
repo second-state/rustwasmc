@@ -146,7 +146,7 @@ fn prebuilt_url(tool: &Tool, version: &str) -> Result<String, failure::Error> {
     };
 
     let semv = Version::parse(version).unwrap();
-    let ssvm_ver = get_ssvm_ver(&format!("{}.{}", semv.major, semv.minor)).unwrap();
+    let ssvm_ver = get_ssvm_ver(&format!("{}.{}.{}", semv.major, semv.minor, semv.patch)).unwrap();
 
     match tool {
         Tool::WasmBindgen => {
