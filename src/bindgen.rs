@@ -27,7 +27,7 @@ pub fn wasm_bindgen_build(
 
     let wasm_path = data
         .target_directory()
-        .join("wasm32-unknown-unknown")
+        .join("wasm32-wasi")
         .join(release_or_debug)
         .join(data.crate_name())
         .with_extension("wasm");

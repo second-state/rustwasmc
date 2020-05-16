@@ -252,7 +252,7 @@ impl Build {
             &self
                 .crate_path
                 .join("target")
-                .join("wasm32-unknown-unknown")
+                .join("wasm32-wasi")
                 .join("release")
         );
         Ok(())

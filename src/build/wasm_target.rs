@@ -18,7 +18,7 @@ struct Wasm32Check {
 
 impl fmt::Display for Wasm32Check {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let target = "wasm32-unknown-unknown";
+        let target = "wasm32-wasi";
 
         if !self.found {
             let rustup_string = if self.is_rustup {
@@ -50,7 +50,7 @@ impl fmt::Display for Wasm32Check {
     }
 }
 
-/// Ensure that `rustup` has the `wasm32-unknown-unknown` target installed for
+/// Ensure that `rustup` has the `wasm32-wasi` target installed for
 /// current toolchain
 pub fn check_for_wasm32_target() -> Result<(), Error> {
     let msg = format!("{}Checking for the Wasm target...", emoji::TARGET);
@@ -80,9 +80,9 @@ fn get_rustc_sysroot() -> Result<PathBuf, Error> {
     }
 }
 
-/// Checks if the wasm32-unknown-unknown is present in rustc's sysroot.
+/// Checks if the wasm32-wasi is present in rustc's sysroot.
 fn is_wasm32_target_in_sysroot(sysroot: &PathBuf) -> bool {
-    let wasm32_target = "wasm32-unknown-unknown";
+    let wasm32_target = "wasm32-wasi";
 
     let rustlib_path = sysroot.join("lib/rustlib");
 
@@ -101,7 +101,7 @@ fn check_wasm32_target() -> Result<Wasm32Check, Error> {
     let sysroot = get_rustc_sysroot()?;
     let rustc_path = which::which("rustc")?;
 
-    // If wasm32-unknown-unknown already exists we're ok.
+    // If wasm32-wasi already exists we're ok.
     if is_wasm32_target_in_sysroot(&sysroot) {
         Ok(Wasm32Check {
             rustc_path,
@@ -112,7 +112,7 @@ fn check_wasm32_target() -> Result<Wasm32Check, Error> {
     // If it doesn't exist, then we need to check if we're using rustup.
     } else {
         // If sysroot contains "rustup", then we can assume we're using rustup
-        // and use rustup to add the wasm32-unknown-unknown target.
+        // and use rustup to add the wasm32-wasi target.
         if sysroot.to_string_lossy().contains("rustup") {
             rustup_add_wasm_target().map(|()| Wasm32Check {
                 rustc_path,
@@ -131,11 +131,11 @@ fn check_wasm32_target() -> Result<Wasm32Check, Error> {
     }
 }
 
-/// Add wasm32-unknown-unknown using `rustup`.
+/// Add wasm32-wasi using `rustup`.
 fn rustup_add_wasm_target() -> Result<(), Error> {
     let mut cmd = Command::new("rustup");
-    cmd.arg("target").arg("add").arg("wasm32-unknown-unknown");
-    child::run(cmd, "rustup").context("Adding the wasm32-unknown-unknown target with rustup")?;
+    cmd.arg("target").arg("add").arg("wasm32-wasi");
+    child::run(cmd, "rustup").context("Adding the wasm32-wasi target with rustup")?;
 
     Ok(())
 }

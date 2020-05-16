@@ -48,7 +48,7 @@ fn rustc_minor_version() -> Option<u32> {
     otry!(pieces.next()).parse().ok()
 }
 
-/// Run `cargo build` targetting `wasm32-unknown-unknown`.
+/// Run `cargo build` targetting `wasm32-wasi`.
 pub fn cargo_build_wasm(
     path: &Path,
     profile: BuildProfile,
@@ -82,13 +82,13 @@ pub fn cargo_build_wasm(
         }
     }
 
-    cmd.arg("--target").arg("wasm32-unknown-unknown");
+    cmd.arg("--target").arg("wasm32-wasi");
     cmd.args(extra_options);
     child::run(cmd, "cargo build").context("Compiling your crate to WebAssembly failed")?;
     Ok(())
 }
 
-/// Run `cargo build --tests` targetting `wasm32-unknown-unknown`.
+/// Run `cargo build --tests` targetting `wasm32-wasi`.
 ///
 /// This generates the `Cargo.lock` file that we use in order to know which version of
 /// wasm-bindgen-cli to use when running tests.
@@ -105,7 +105,7 @@ pub fn cargo_build_wasm_tests(path: &Path, debug: bool) -> Result<(), Error> {
         cmd.arg("--release");
     }
 
-    cmd.arg("--target").arg("wasm32-unknown-unknown");
+    cmd.arg("--target").arg("wasm32-wasi");
 
     child::run(cmd, "cargo build").context("Compilation of your program failed")?;
     Ok(())
