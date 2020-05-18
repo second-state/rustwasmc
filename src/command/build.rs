@@ -28,6 +28,7 @@ pub struct Build {
     pub disable_dts: bool,
     pub profile: BuildProfile,
     pub mode: InstallMode,
+    pub target: String,
     pub out_dir: PathBuf,
     pub out_name: Option<String>,
     pub bindgen: Option<Download>,
@@ -61,6 +62,10 @@ pub struct BuildOptions {
     #[structopt(long = "mode", short = "m", default_value = "normal")]
     /// Sets steps to be run. [possible values: no-install, normal, force]
     pub mode: InstallMode,
+
+    #[structopt(long = "nowasi")]
+    /// Sets the wasm target to wasm32-unknown-unknown.
+    pub nowasi: bool,
 
     #[structopt(skip = true)]
     /// By default a *.d.ts file is generated for the generated JS file, but
@@ -99,6 +104,7 @@ impl Default for BuildOptions {
             path: None,
             scope: None,
             mode: InstallMode::default(),
+            nowasi: false,
             disable_dts: true,
             dev: false,
             release: false,
@@ -128,6 +134,11 @@ impl Build {
             _ => bail!("Can only supply one of the --dev, --release, or --profiling flags"),
         };
 
+        let target = match build_opts.nowasi {
+            true => "wasm32-unknown-unknown",
+            false => "wasm32-wasi",
+        };
+
         Ok(Build {
             crate_path,
             crate_data,
@@ -135,6 +146,7 @@ impl Build {
             disable_dts: build_opts.disable_dts,
             profile,
             mode: build_opts.mode,
+            target: target.to_string(),
             out_dir,
             out_name: build_opts.out_name,
             bindgen: None,
@@ -238,21 +250,21 @@ impl Build {
 
     fn step_check_for_wasm_target(&mut self) -> Result<(), Error> {
         info!("Checking for wasm-target...");
-        build::wasm_target::check_for_wasm32_target()?;
+        build::wasm_target::check_for_wasm32_target(&self.target)?;
         info!("Checking for wasm-target was successful.");
         Ok(())
     }
 
     fn step_build_wasm(&mut self) -> Result<(), Error> {
         info!("Building wasm...");
-        build::cargo_build_wasm(&self.crate_path, self.profile, &self.extra_options)?;
+        build::cargo_build_wasm(&self.crate_path, self.profile, &self.target, &self.extra_options)?;
 
         info!(
             "wasm built at {:#?}.",
             &self
                 .crate_path
                 .join("target")
-                .join("wasm32-wasi")
+                .join(&self.target)
                 .join("release")
         );
         Ok(())
@@ -317,6 +329,7 @@ impl Build {
             &self.out_name,
             self.disable_dts,
             self.profile,
+            &self.target,
         )?;
         info!("wasm bindings were built at {:#?}.", &self.out_dir);
         Ok(())

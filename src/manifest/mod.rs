@@ -504,7 +504,7 @@ impl CrateData {
             return Ok(());
         }
         bail!(
-            "crate-type must be cdylib to compile to wasm32-wasi. Add the following to your \
+            "crate-type must be cdylib to compile to wasm32. Add the following to your \
              Cargo.toml file:\n\n\
              [lib]\n\
              crate-type = [\"cdylib\", \"rlib\"]"

@@ -14,11 +14,12 @@ struct Wasm32Check {
     sysroot: PathBuf,
     found: bool,
     is_rustup: bool,
+    target: String,
 }
 
 impl fmt::Display for Wasm32Check {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        let target = "wasm32-wasi";
+        let target = &self.target;
 
         if !self.found {
             let rustup_string = if self.is_rustup {
@@ -50,14 +51,14 @@ impl fmt::Display for Wasm32Check {
     }
 }
 
-/// Ensure that `rustup` has the `wasm32-wasi` target installed for
+/// Ensure that `rustup` has the `wasm32-*` target installed for
 /// current toolchain
-pub fn check_for_wasm32_target() -> Result<(), Error> {
+pub fn check_for_wasm32_target(target: &str) -> Result<(), Error> {
     let msg = format!("{}Checking for the Wasm target...", emoji::TARGET);
     PBAR.info(&msg);
 
     // Check if wasm32 target is present, otherwise bail.
-    match check_wasm32_target() {
+    match check_wasm32_target(target) {
         Ok(ref wasm32_check) if wasm32_check.found => Ok(()),
         Ok(wasm32_check) => bail!("{}", wasm32_check),
         Err(err) => Err(err),
@@ -80,10 +81,8 @@ fn get_rustc_sysroot() -> Result<PathBuf, Error> {
     }
 }
 
-/// Checks if the wasm32-wasi is present in rustc's sysroot.
-fn is_wasm32_target_in_sysroot(sysroot: &PathBuf) -> bool {
-    let wasm32_target = "wasm32-wasi";
-
+/// Checks if the wasm32 target is present in rustc's sysroot.
+fn is_wasm32_target_in_sysroot(sysroot: &PathBuf, wasm32_target: &str) -> bool {
     let rustlib_path = sysroot.join("lib/rustlib");
 
     info!("Looking for {} in {:?}", wasm32_target, rustlib_path);
@@ -97,28 +96,31 @@ fn is_wasm32_target_in_sysroot(sysroot: &PathBuf) -> bool {
     }
 }
 
-fn check_wasm32_target() -> Result<Wasm32Check, Error> {
+fn check_wasm32_target(targ: &str) -> Result<Wasm32Check, Error> {
     let sysroot = get_rustc_sysroot()?;
     let rustc_path = which::which("rustc")?;
+    let target = targ.to_string();
 
-    // If wasm32-wasi already exists we're ok.
-    if is_wasm32_target_in_sysroot(&sysroot) {
+    // If wasm32 target already exists we're ok.
+    if is_wasm32_target_in_sysroot(&sysroot, targ) {
         Ok(Wasm32Check {
             rustc_path,
             sysroot,
             found: true,
             is_rustup: false,
+            target,
         })
     // If it doesn't exist, then we need to check if we're using rustup.
     } else {
         // If sysroot contains "rustup", then we can assume we're using rustup
-        // and use rustup to add the wasm32-wasi target.
+        // and use rustup to add the wasm32 target.
         if sysroot.to_string_lossy().contains("rustup") {
-            rustup_add_wasm_target().map(|()| Wasm32Check {
+            rustup_add_wasm_target(targ).map(|()| Wasm32Check {
                 rustc_path,
                 sysroot,
                 found: true,
                 is_rustup: true,
+                target,
             })
         } else {
             Ok(Wasm32Check {
@@ -126,16 +128,17 @@ fn check_wasm32_target() -> Result<Wasm32Check, Error> {
                 sysroot,
                 found: false,
                 is_rustup: false,
+                target,
             })
         }
     }
 }
 
-/// Add wasm32-wasi using `rustup`.
-fn rustup_add_wasm_target() -> Result<(), Error> {
+/// Add wasm32 target using `rustup`.
+fn rustup_add_wasm_target(target: &str) -> Result<(), Error> {
     let mut cmd = Command::new("rustup");
-    cmd.arg("target").arg("add").arg("wasm32-wasi");
-    child::run(cmd, "rustup").context("Adding the wasm32-wasi target with rustup")?;
+    cmd.arg("target").arg("add").arg(target);
+    child::run(cmd, "rustup").context(format!("Adding the {} target with rustup", target))?;
 
     Ok(())
 }

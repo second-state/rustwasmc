@@ -48,10 +48,11 @@ fn rustc_minor_version() -> Option<u32> {
     otry!(pieces.next()).parse().ok()
 }
 
-/// Run `cargo build` targetting `wasm32-wasi`.
+/// Run `cargo build` targetting `wasm32-wasi` or `wasm32-unknown-unknown`.
 pub fn cargo_build_wasm(
     path: &Path,
     profile: BuildProfile,
+    target: &str,
     extra_options: &[String],
 ) -> Result<(), Error> {
     let msg = format!("{}Compiling to Wasm...", emoji::CYCLONE);
@@ -82,7 +83,7 @@ pub fn cargo_build_wasm(
         }
     }
 
-    cmd.arg("--target").arg("wasm32-wasi");
+    cmd.arg("--target").arg(target);
     cmd.args(extra_options);
     child::run(cmd, "cargo build").context("Compiling your crate to WebAssembly failed")?;
     Ok(())

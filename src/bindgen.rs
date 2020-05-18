@@ -17,6 +17,7 @@ pub fn wasm_bindgen_build(
     out_name: &Option<String>,
     disable_dts: bool,
     profile: BuildProfile,
+    target: &str,
 ) -> Result<(), failure::Error> {
     let release_or_debug = match profile {
         BuildProfile::Release | BuildProfile::Profiling => "release",
@@ -27,7 +28,7 @@ pub fn wasm_bindgen_build(
 
     let wasm_path = data
         .target_directory()
-        .join("wasm32-wasi")
+        .join(target)
         .join(release_or_debug)
         .join(data.crate_name())
         .with_extension("wasm");
