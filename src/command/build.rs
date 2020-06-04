@@ -192,9 +192,9 @@ impl Build {
         let bo = BuildOptions::default();
         let b = Build::try_from_opts(bo)?;
         info!("Removing the {} directory...", b.out_dir.display());
-        fs::remove_dir_all(b.out_dir)?;
+        fs::remove_dir_all(b.out_dir);
         info!("Removing the {} directory...", b.crate_data.target_directory().display());
-        fs::remove_dir_all(b.crate_data.target_directory())?;
+        fs::remove_dir_all(b.crate_data.target_directory());
         Ok(())
     }
 
