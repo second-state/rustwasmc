@@ -29,6 +29,7 @@ pub struct Build {
     pub profile: BuildProfile,
     pub mode: InstallMode,
     pub target: String,
+    pub run_target: String,
     pub out_dir: PathBuf,
     pub out_name: Option<String>,
     pub bindgen: Option<Download>,
@@ -66,6 +67,10 @@ pub struct BuildOptions {
     #[structopt(long = "nowasi")]
     /// Sets the wasm target to wasm32-unknown-unknown.
     pub nowasi: bool,
+
+    #[structopt(long = "target", default_value = "ssvm")]
+    /// Sets the runtime target. [possible values: ssvm(default), nodejs, deno].
+    pub target: String,
 
     #[structopt(skip = true)]
     /// By default a *.d.ts file is generated for the generated JS file, but
@@ -105,6 +110,7 @@ impl Default for BuildOptions {
             scope: None,
             mode: InstallMode::default(),
             nowasi: false,
+            target: String::from("ssvm"),
             disable_dts: true,
             dev: false,
             release: false,
@@ -147,6 +153,7 @@ impl Build {
             profile,
             mode: build_opts.mode,
             target: target.to_string(),
+            run_target: build_opts.target,
             out_dir,
             out_name: build_opts.out_name,
             bindgen: None,
@@ -330,6 +337,7 @@ impl Build {
             self.disable_dts,
             self.profile,
             &self.target,
+            &self.run_target,
         )?;
         info!("wasm bindings were built at {:#?}.", &self.out_dir);
         Ok(())

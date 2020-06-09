@@ -18,6 +18,7 @@ pub fn wasm_bindgen_build(
     disable_dts: bool,
     profile: BuildProfile,
     target: &str,
+    run_target: &str,
 ) -> Result<(), failure::Error> {
     let release_or_debug = match profile {
         BuildProfile::Release | BuildProfile::Profiling => "release",
@@ -46,7 +47,7 @@ pub fn wasm_bindgen_build(
         .arg(out_dir)
         .arg(dts_arg);
 
-    cmd.arg("--target").arg("ssvm");
+    cmd.arg("--target").arg(run_target);
 
     if let Some(value) = out_name {
         cmd.arg("--out-name").arg(value);
