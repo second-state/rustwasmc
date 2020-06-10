@@ -1,6 +1,6 @@
 {
   "name": "ssvmup",
-  "version": "0.1.10",
+  "version": "0.1.11",
   "description": "SSVM ready tool",
   "main": "binary.js",
   "scripts": {

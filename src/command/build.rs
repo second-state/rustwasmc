@@ -140,10 +140,14 @@ impl Build {
             _ => bail!("Can only supply one of the --dev, --release, or --profiling flags"),
         };
 
-        let target = match build_opts.nowasi {
+        let mut target = match build_opts.nowasi {
             true => "wasm32-unknown-unknown",
             false => "wasm32-wasi",
         };
+
+        if build_opts.target == "deno" {
+            target = "wasm32-unknown-unknown";
+        }
 
         Ok(Build {
             crate_path,
