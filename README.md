@@ -30,9 +30,19 @@ From NPM and Node.js
 npm i -g ssvmup
 ```
 
-## Commands
+## Usage
 
-- `build`: Compile and generate the wasm file, and the corresponding JavaScript file to call wasm functions from JavaScript
+To build [Rust functions for Node.js](/articles/getting-started-with-rust-function) applications, use the following command. See a [template application](https://github.com/second-state/ssvm-nodejs-starter). The ssvmup compiles and generates the wasm file, and the corresponding JavaScript file to call wasm functions from JavaScript.
+
+```
+$ ssvmup build
+```
+
+To build Rust functions for Deno applications, use the following command. See a [template application](https://github.com/second-state/ssvm-deno-starter).
+
+```
+$ ssvmup build --target deno
+```
 
 ## Logging
 
