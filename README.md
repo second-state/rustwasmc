@@ -10,11 +10,11 @@
 ![GitHub language count](https://img.shields.io/github/languages/count/second-state/ssvmup)
 ![GitHub top language](https://img.shields.io/github/languages/top/second-state/ssvmup)
 
-Developers: [Getting started](https://cloud.secondstate.io/server-side-webassembly/getting-started) building Rust + JavaScript hybrid apps for Node.js using the `ssvmup` tool.
+Developers: [Getting started](https://www.secondstate.io/articles/getting-started-with-rust-function/) building Rust + JavaScript hybrid apps for Node.js using the `ssvmup` tool.
 
 ## About
 
-A one-stop tool for building Rust functions into WebAssembly (the [Second State VM, or SSVM](https://github.com/second-state/SSVM)) and then accessing these functions from Node.js JavaScript.
+A one-stop tool for building Rust functions into WebAssembly (the [Second State VM, or SSVM](https://www.secondstate.io/ssvm/)) and then accessing these functions from Node.js JavaScript.
 
 ## Install
 
