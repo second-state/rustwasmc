@@ -1,0 +1,40 @@
+version: 2.0
+
+language: rust
+
+rust:
+  - stable
+
+jobs:
+  include:
+    - os: osx
+      arch: amd64
+      env: ENV_NAME="x86_64-apple-darwin"
+    - os: windows
+      arch: amd64
+      env: ENV_NAME="x86_64-pc-windows-msvc"
+    - os: linux
+      arch: amd64
+      env: ENV_NAME="x86_64-unknown-linux-gnu"
+    - os: linux
+      arch: arm64
+      env: ENV_NAME="arm64-unknown-linux-gnu"
+
+install:
+  - cargo build --release
+
+script:
+  - mkdir ssvmup-$TRAVIS_TAG-$ENV_NAME
+  - cp ./target/release/ssvmup ssvmup-$TRAVIS_TAG-$ENV_NAME
+  - tar -czf ssvmup-$TRAVIS_TAG-$ENV_NAME.tar.gz ssvmup-$TRAVIS_TAG-$ENV_NAME
+
+deploy:
+  provider: releases
+  overwrite: false
+  api-key: $GITHUB_TOKEN
+  skip_cleanup: true
+  file: "ssvmup-$TRAVIS_TAG-$ENV_NAME.tar.gz"
+  name: Release $TRAVIS_TAG
+  on:
+    repo: second-state/ssvmup
+    tags: true
