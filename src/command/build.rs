@@ -255,6 +255,13 @@ impl Build {
     fn step_check_crate_config(&mut self) -> Result<(), Error> {
         info!("Checking crate configuration...");
         self.crate_data.check_crate_config()?;
+
+        // ssvm only support wasm-bindgen 0.2.61
+        let lockfile = Lockfile::new(&self.crate_data)?;
+        let bindgen_version = lockfile.require_wasm_bindgen()?;
+        if bindgen_version != "0.2.61" {
+            bail!("Sorry, ssvmup only supports wasm-bindgen 0.2.61 at this time. Please fix your Cargo.toml to wasm-bindgen = \"=0.2.61\"")
+        }
         info!("Crate is correctly configured.");
         Ok(())
     }

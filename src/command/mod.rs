@@ -28,6 +28,12 @@ pub fn run_ssvmup(command: Command) -> result::Result<(), Error> {
     match command {
         Command::Build(build_opts) => {
             info!("Running build command...");
+            // Check rust toolchain first
+            let o = std::process::Command::new("rustc").arg("--version").output();
+            match o {
+                Err(e) => bail!("Please follow instructions to install Rust language tools first. https://www.secondstate.io/articles/ssvmup/ Thank you."),
+                _ => {}
+            }
             Build::try_from_opts(build_opts).and_then(|mut b| b.run())
         }
         Command::Clean{} => {
