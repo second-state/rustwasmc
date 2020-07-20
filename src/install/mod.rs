@@ -141,6 +141,8 @@ fn prebuilt_url(tool: &Tool, version: &str) -> Result<String, failure::Error> {
         "x86_64-apple-darwin"
     } else if target::WINDOWS && target::x86_64 {
         "x86_64-pc-windows-msvc"
+    } else if target::LINUX && target::aarch64 {
+        "aarch64-unknown-linux-gnu"
     } else {
         bail!("Unrecognized target!")
     };

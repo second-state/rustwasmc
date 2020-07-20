@@ -79,6 +79,8 @@ pub fn find_wasm_opt(cache: &Cache, install_permitted: bool) -> Result<WasmOpt, 
         "x86_64-apple-darwin"
     } else if target::WINDOWS && target::x86_64 {
         "x86_64-windows"
+    } else if target::LINUX && target::aarch64 {
+        "aarch64-linux"
     } else {
         return Ok(WasmOpt::PlatformNotSupported);
     };

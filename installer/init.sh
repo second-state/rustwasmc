@@ -114,6 +114,11 @@ get_architecture() {
         x86_64 | x86-64 | x64 | amd64)
             local _cputype=x86_64
             ;;
+
+        aarch64)
+            local _cputype=aarch64
+            ;;
+
         *)
             err "no precompiled binaries available for CPU architecture: $_cputype"
 
