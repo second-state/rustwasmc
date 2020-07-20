@@ -34,9 +34,3 @@ deploy:
     name: Release $TRAVIS_TAG
     on:
       tags: true
-  - provider: npm
-    email: $NPM_EMAIL
-    api_token: $NPM_TOKEN
-    src: ./npm
-    on:
-      tags: true
