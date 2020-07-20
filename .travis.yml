@@ -32,9 +32,10 @@ deploy:
     token: $GITHUB_TOKEN
     file: "ssvmup-$TRAVIS_TAG-$ENV_NAME.tar.gz"
     name: Release $TRAVIS_TAG
+    on:
+      tags: true
   - provider: npm
     api_token: $NPM_TOKEN
     src: npm
-  on:
-    repo: second-state/ssvmup
-    tags: true
+    on:
+      tags: true
