@@ -29,12 +29,15 @@ script:
   - tar -czf ssvmup-$TRAVIS_TAG-$ENV_NAME.tar.gz ssvmup-$TRAVIS_TAG-$ENV_NAME
 
 deploy:
-  provider: releases
-  overwrite: false
-  api-key: $GITHUB_TOKEN
-  skip_cleanup: true
-  file: "ssvmup-$TRAVIS_TAG-$ENV_NAME.tar.gz"
-  name: Release $TRAVIS_TAG
+  - provider: releases
+    overwrite: false
+    api-key: $GITHUB_TOKEN
+    skip_cleanup: true
+    file: "ssvmup-$TRAVIS_TAG-$ENV_NAME.tar.gz"
+    name: Release $TRAVIS_TAG
+  - provider: npm
+    api_token: $NPM_TOKEN
+    src: npm
   on:
     repo: second-state/ssvmup
     tags: true
