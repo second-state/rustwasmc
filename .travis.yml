@@ -29,6 +29,7 @@ script:
 deploy:
   - provider: releases
     overwrite: false
+    skip_cleanup: true
     token: $GITHUB_TOKEN
     file: "ssvmup-$TRAVIS_TAG-$ENV_NAME.tar.gz"
     name: Release $TRAVIS_TAG
