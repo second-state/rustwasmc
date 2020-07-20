@@ -1,5 +1,3 @@
-version: 2.0
-
 language: rust
 
 rust:
@@ -31,8 +29,7 @@ script:
 deploy:
   - provider: releases
     overwrite: false
-    api-key: $GITHUB_TOKEN
-    skip_cleanup: true
+    token: $GITHUB_TOKEN
     file: "ssvmup-$TRAVIS_TAG-$ENV_NAME.tar.gz"
     name: Release $TRAVIS_TAG
   - provider: npm
