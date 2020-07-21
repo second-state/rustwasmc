@@ -12,9 +12,11 @@ jobs:
       arch: amd64
       env: ENV_NAME="x86_64-pc-windows-msvc"
     - os: linux
+      dist: bionic
       arch: amd64
       env: ENV_NAME="x86_64-unknown-linux-gnu"
     - os: linux
+      dist: bionic
       arch: arm64
       env: ENV_NAME="aarch64-unknown-linux-gnu"
 
