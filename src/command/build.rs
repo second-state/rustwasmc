@@ -145,10 +145,6 @@ impl Build {
             false => "wasm32-wasi",
         };
 
-        if build_opts.target == "deno" {
-            target = "wasm32-unknown-unknown";
-        }
-
         Ok(Build {
             crate_path,
             crate_data,

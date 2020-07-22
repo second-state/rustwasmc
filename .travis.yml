@@ -31,9 +31,18 @@ script:
 deploy:
   - provider: releases
     overwrite: false
-    skip_cleanup: true
+    cleanup: false
     token: $GITHUB_TOKEN
     file: "ssvmup-$TRAVIS_TAG-$ENV_NAME.tar.gz"
     name: Release $TRAVIS_TAG
+    edge: true
     on:
       tags: true
+  - provider: npm
+    email: $NPM_EMAIL
+    api_token: $NPM_TOKEN
+    src: ./npm
+    edge: true
+    on:
+      tags: true
+      condition: $ENV_NAME = "x86_64-apple-darwin"
