@@ -498,8 +498,8 @@ impl CrateData {
         let any_cdylib = pkg
             .targets
             .iter()
-            .filter(|target| target.kind.iter().any(|k| k == "cdylib"))
-            .any(|target| target.crate_types.iter().any(|s| s == "cdylib"));
+            .filter(|target| target.kind.iter().any(|k| k == "cdylib" || k == "bin"))
+            .any(|target| target.crate_types.iter().any(|s| s == "cdylib" || s == "bin"));
         if any_cdylib {
             return Ok(());
         }
@@ -512,23 +512,21 @@ impl CrateData {
     }
 
     /// Get the crate name for the crate at the given path.
-    pub fn crate_name(&self) -> String {
+    pub fn crate_name(&self) -> Vec<String> {
         let pkg = &self.data.packages[self.current_idx];
-        match pkg
+        return pkg
             .targets
             .iter()
-            .find(|t| t.kind.iter().any(|k| k == "cdylib"))
-        {
-            Some(lib) => lib.name.replace("-", "_"),
-            None => pkg.name.replace("-", "_"),
-        }
+            .filter(|t| t.kind.iter().any(|k| k == "cdylib" || k == "bin"))
+            .map(|t| t.name.replace("-", "_"))
+            .collect();
     }
 
     /// Get the prefix for output file names
     pub fn name_prefix(&self) -> String {
         match &self.out_name {
             Some(value) => value.clone(),
-            None => self.crate_name(),
+            None => self.data.packages[self.current_idx].name.replace("-", "_"),
         }
     }
 
