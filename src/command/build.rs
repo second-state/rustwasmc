@@ -64,10 +64,6 @@ pub struct BuildOptions {
     /// Sets steps to be run. [possible values: no-install, normal, force]
     pub mode: InstallMode,
 
-    #[structopt(long = "nowasi")]
-    /// Sets the wasm target to wasm32-unknown-unknown.
-    pub nowasi: bool,
-
     #[structopt(long = "target", default_value = "ssvm")]
     /// Sets the runtime target. [possible values: ssvm(default), nodejs, deno].
     pub target: String,
@@ -109,7 +105,6 @@ impl Default for BuildOptions {
             path: None,
             scope: None,
             mode: InstallMode::default(),
-            nowasi: false,
             target: String::from("ssvm"),
             disable_dts: true,
             dev: false,
@@ -140,11 +135,6 @@ impl Build {
             _ => bail!("Can only supply one of the --dev, --release, or --profiling flags"),
         };
 
-        let mut target = match build_opts.nowasi {
-            true => "wasm32-unknown-unknown",
-            false => "wasm32-wasi",
-        };
-
         Ok(Build {
             crate_path,
             crate_data,
@@ -152,7 +142,7 @@ impl Build {
             disable_dts: build_opts.disable_dts,
             profile,
             mode: build_opts.mode,
-            target: target.to_string(),
+            target: String::from("wasm32-wasi"),
             run_target: build_opts.target,
             out_dir,
             out_name: build_opts.out_name,

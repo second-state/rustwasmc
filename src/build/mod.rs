@@ -48,7 +48,7 @@ fn rustc_minor_version() -> Option<u32> {
     otry!(pieces.next()).parse().ok()
 }
 
-/// Run `cargo build` targetting `wasm32-wasi` or `wasm32-unknown-unknown`.
+/// Run `cargo build` targetting `wasm32-wasi`.
 pub fn cargo_build_wasm(
     path: &Path,
     profile: BuildProfile,
