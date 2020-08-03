@@ -15,7 +15,7 @@
 
 set -u
 
-UPDATE_ROOT="https://github.com/second-state/ssvmup/releases/download/v0.1.14"
+UPDATE_ROOT="https://github.com/second-state/ssvmup/releases/download/v0.1.15"
 
 main() {
     downloader --check
@@ -43,7 +43,7 @@ main() {
     which rustup > /dev/null 2>&1
     need_ok "failed to find Rust installation, is rustup installed?"
     local _rustup=`which rustup`
-    local _tardir="ssvmup-v0.1.14-${_arch}"
+    local _tardir="ssvmup-v0.1.15-${_arch}"
     local _url="$UPDATE_ROOT/${_tardir}.tar.gz"
     local _dir="$(mktemp -d 2>/dev/null || ensure mktemp -d -t ssvmup)"
     local _file="$_dir/input.tar.gz"
