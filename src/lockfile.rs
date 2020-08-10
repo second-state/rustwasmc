@@ -46,8 +46,8 @@ impl Lockfile {
             format_err!(
                 "Ensure that you have \"{}\" as a dependency in your Cargo.toml file:\n\
                  [dependencies]\n\
-                 wasm-bindgen = \"0.2\"",
-                style("wasm-bindgen").bold().dim(),
+                 wasm-bindgen = \"=0.2.61\"",
+                style("wasm-bindgen 0.2.61").bold().dim(),
             )
         })
     }

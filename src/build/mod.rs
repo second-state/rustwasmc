@@ -59,7 +59,7 @@ pub fn cargo_build_wasm(
     PBAR.info(&msg);
 
     let mut cmd = Command::new("cargo");
-    cmd.current_dir(path).arg("build").arg("--lib").arg("--bins");
+    cmd.current_dir(path).arg("build").arg("--all-targets");
 
     if PBAR.quiet() {
         cmd.arg("--quiet");
