@@ -19,6 +19,7 @@ pub fn wasm_bindgen_build(
     profile: BuildProfile,
     target: &str,
     run_target: &str,
+    enable_aot: bool,
 ) -> Result<(), failure::Error> {
     let release_or_debug = match profile {
         BuildProfile::Release | BuildProfile::Profiling => "release",
@@ -55,6 +56,9 @@ pub fn wasm_bindgen_build(
         }
         if profile.wasm_bindgen_dwarf_debug_info() {
             cmd.arg("--keep-debug");
+        }
+        if enable_aot {
+            cmd.arg("--enable-aot");
         }
         let wasm_path = data
             .target_directory()

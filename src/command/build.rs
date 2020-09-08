@@ -29,6 +29,7 @@ pub struct Build {
     pub profile: BuildProfile,
     pub mode: InstallMode,
     pub target: String,
+    pub enable_aot: bool,
     pub run_target: String,
     pub out_dir: PathBuf,
     pub out_name: Option<String>,
@@ -68,6 +69,10 @@ pub struct BuildOptions {
     /// Sets the runtime target. [possible values: ssvm(default), nodejs, deno].
     pub target: String,
 
+    #[structopt(long = "enable-aot")]
+    /// Enable AOT in SSVM
+    pub enable_aot: bool,
+
     #[structopt(skip = true)]
     /// By default a *.d.ts file is generated for the generated JS file, but
     /// this flag will disable generating this TypeScript file.
@@ -106,6 +111,7 @@ impl Default for BuildOptions {
             scope: None,
             mode: InstallMode::default(),
             target: String::from("ssvm"),
+            enable_aot: false,
             disable_dts: true,
             dev: false,
             release: false,
@@ -143,6 +149,7 @@ impl Build {
             profile,
             mode: build_opts.mode,
             target: String::from("wasm32-wasi"),
+            enable_aot: build_opts.enable_aot,
             run_target: build_opts.target,
             out_dir,
             out_name: build_opts.out_name,
@@ -335,6 +342,7 @@ impl Build {
             self.profile,
             &self.target,
             &self.run_target,
+            self.enable_aot,
         )?;
         info!("wasm bindings were built at {:#?}.", &self.out_dir);
         Ok(())

@@ -169,17 +169,32 @@ fn prebuilt_url(tool: &Tool, version: &str) -> Result<String, failure::Error> {
 }
 
 fn get_ssvm_ver(bindgen_semver: &str) -> Result<String, failure::Error> {
-    let mut handle = Easy::new();
     let mut vers = String::new();
-
-    handle.url("https://raw.githubusercontent.com/second-state/wasm-bindgen/ssvm/bindgen-ssvm-vers.json").unwrap();
+    let mut retry = false;
+    
     {
+        let mut handle = Easy::new();
+        handle.url("https://raw.githubusercontent.com/second-state/wasm-bindgen/ssvm/bindgen-ssvm-vers.json").unwrap();
         let mut transfer = handle.transfer();
         transfer.write_function(|data| {
             vers = String::from_utf8(data.to_vec()).unwrap();
             Ok(data.len())
         }).unwrap();
-        transfer.perform().unwrap();
+        if transfer.perform().is_err() {
+            retry = true;
+        }
+    }
+    if retry {
+        let mut handle = Easy::new();
+        handle.url("https://wasm-bindgen-1302969175.cos.ap-beijing.myqcloud.com/bindgen-ssvm-vers.json").unwrap();
+        {
+            let mut transfer = handle.transfer();
+            transfer.write_function(|data| {
+                vers = String::from_utf8(data.to_vec()).unwrap();
+                Ok(data.len())
+            }).unwrap();
+            transfer.perform().unwrap();
+        }
     }
 
     let vers: Value = serde_json::from_str(&vers).unwrap();
