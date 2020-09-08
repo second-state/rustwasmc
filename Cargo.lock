@@ -1818,7 +1818,7 @@ dependencies = [
 
 [[package]]
 name = "ssvmup"
-version = "0.1.16"
+version = "0.1.17"
 dependencies = [
  "assert_cmd",
  "atty",

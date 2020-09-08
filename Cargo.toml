@@ -1,6 +1,6 @@
 [package]
 name = "ssvmup"
-version = "0.1.16"
+version = "0.1.17"
 authors = ["wangshishuo"]
 repository = "https://github.com/second-state/ssvmup.git"
 license = "MIT/Apache-2.0"
