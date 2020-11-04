@@ -80,7 +80,7 @@ pub fn find_ssvmc(cache: &Cache, install_permitted: bool) -> Result<SsvmcOpt, fa
         return Ok(SsvmcOpt::PlatformNotSupported);
     };
     let url = format!(
-        "https://github.com/second-state/SSVM/releases/download/{vers}/ssvmc",
+        "https://github.com/second-state/SSVM/releases/download/{vers}/ssvm-{vers}-linux-x64.tar.gz",
         vers = "0.7.0",
     );
 
