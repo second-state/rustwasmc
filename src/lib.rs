@@ -40,6 +40,7 @@ pub mod progressbar;
 pub mod readme;
 pub mod target;
 pub mod wasm_opt;
+pub mod ssvmc;
 
 use progressbar::{LogLevel, ProgressOutput};
 

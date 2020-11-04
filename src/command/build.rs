@@ -1,6 +1,7 @@
 //! Implementation of the `ssvmup build` command.
 
 use crate::wasm_opt;
+use crate::ssvmc;
 use binary_install::{Cache, Download};
 use bindgen;
 use build;
@@ -196,9 +197,9 @@ impl Build {
         let bo = BuildOptions::default();
         let b = Build::try_from_opts(bo)?;
         info!("Removing the {} directory...", b.out_dir.display());
-        fs::remove_dir_all(b.out_dir);
+        fs::remove_dir_all(b.out_dir)?;
         info!("Removing the {} directory...", b.crate_data.target_directory().display());
-        fs::remove_dir_all(b.crate_data.target_directory());
+        fs::remove_dir_all(b.crate_data.target_directory())?;
         Ok(())
     }
 
@@ -232,6 +233,7 @@ impl Build {
             step_install_wasm_bindgen,
             step_run_wasm_bindgen,
             step_run_wasm_opt,
+            step_run_ssvmc,
             step_create_json,
         ]);
         steps
@@ -368,5 +370,18 @@ impl Build {
                 "{}\nTo disable `wasm-opt`, add `wasm-opt = false` to your package metadata in your `Cargo.toml`.", e
             )
         })
+    }
+
+    fn step_run_ssvmc(&mut self) -> Result<(), Error> {
+        if !self.enable_aot {
+            return Ok(())
+        }
+        ssvmc::run(
+            &self.cache,
+            &self.out_dir,
+            self.mode.install_permitted(),
+        )?;
+
+        Ok(())
     }
 }
