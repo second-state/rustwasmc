@@ -20,6 +20,7 @@ pub fn wasm_bindgen_build(
     target: &str,
     run_target: &str,
     enable_aot: bool,
+    enable_ext: bool,
 ) -> Result<(), failure::Error> {
     let release_or_debug = match profile {
         BuildProfile::Release | BuildProfile::Profiling => "release",
@@ -59,6 +60,9 @@ pub fn wasm_bindgen_build(
         }
         if enable_aot {
             cmd.arg("--enable-aot");
+        }
+        if enable_ext {
+            cmd.arg("--enable-ext");
         }
         let wasm_path = data
             .target_directory()

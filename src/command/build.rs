@@ -31,6 +31,7 @@ pub struct Build {
     pub mode: InstallMode,
     pub target: String,
     pub enable_aot: bool,
+    pub enable_ext: bool,
     pub run_target: String,
     pub out_dir: PathBuf,
     pub out_name: Option<String>,
@@ -74,6 +75,10 @@ pub struct BuildOptions {
     /// Enable AOT in SSVM
     pub enable_aot: bool,
 
+    #[structopt(long = "enable-ext")]
+    /// Requiring ssvm-extensions instead of ssvm
+    pub enable_ext: bool,
+
     #[structopt(skip = true)]
     /// By default a *.d.ts file is generated for the generated JS file, but
     /// this flag will disable generating this TypeScript file.
@@ -113,6 +118,7 @@ impl Default for BuildOptions {
             mode: InstallMode::default(),
             target: String::from("ssvm"),
             enable_aot: false,
+            enable_ext: false,
             disable_dts: true,
             dev: false,
             release: false,
@@ -151,6 +157,7 @@ impl Build {
             mode: build_opts.mode,
             target: String::from("wasm32-wasi"),
             enable_aot: build_opts.enable_aot,
+            enable_ext: build_opts.enable_ext,
             run_target: build_opts.target,
             out_dir,
             out_name: build_opts.out_name,
@@ -345,6 +352,7 @@ impl Build {
             &self.target,
             &self.run_target,
             self.enable_aot,
+            self.enable_ext,
         )?;
         info!("wasm bindings were built at {:#?}.", &self.out_dir);
         Ok(())
