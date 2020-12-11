@@ -23,7 +23,7 @@ pub fn run(
             return Ok(());
         }
         SsvmcOpt::PlatformNotSupported => {
-            PBAR.info("You need to Ubuntu 20.04 to compile the AOT binary. Please see https://www.secondstate.io/articles/setup-rust-nodejs/");
+            PBAR.info("You need Ubuntu 20.04 to compile the AOT binary. Please see https://www.secondstate.io/articles/setup-rust-nodejs/");
             return Ok(());
         }
     };
@@ -41,7 +41,7 @@ pub fn run(
         let mut cmd = Command::new(&ssvmc);
         cmd.arg(&path).arg(&tmp);
         if let Err(e) = child::run(cmd, "ssvmc") {
-            PBAR.info("You need to Ubuntu 20.04 to compile the AOT binary. Please see https://www.secondstate.io/articles/setup-rust-nodejs/");
+            PBAR.info("You need Ubuntu 20.04 to compile the AOT binary. Please see https://www.secondstate.io/articles/setup-rust-nodejs/");
             return Err(e)
         }
     }

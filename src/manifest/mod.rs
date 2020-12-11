@@ -492,22 +492,31 @@ impl CrateData {
         self.check_crate_type()?;
         Ok(())
     }
-
-    fn check_crate_type(&self) -> Result<(), Error> {
+    
+    /// Check the crate type is valid.
+    /// Return whether [bin] is the only crate type.
+    pub fn check_crate_type(&self) -> Result<bool, Error> {
         let pkg = &self.data.packages[self.current_idx];
         let any_cdylib = pkg
             .targets
             .iter()
-            .filter(|target| target.kind.iter().any(|k| k == "cdylib" || k == "bin"))
-            .any(|target| target.crate_types.iter().any(|s| s == "cdylib" || s == "bin"));
-        if any_cdylib {
-            return Ok(());
+            .filter(|target| target.kind.iter().any(|k| k == "cdylib"))
+            .any(|target| target.crate_types.iter().any(|s| s == "cdylib"));
+        let any_bin = pkg
+            .targets
+            .iter()
+            .filter(|target| target.kind.iter().any(|k| k == "bin"))
+            .any(|target| target.crate_types.iter().any(|s| s == "bin"));
+        if any_cdylib || any_bin {
+            return Ok(!any_cdylib);
         }
         bail!(
-            "crate-type must be cdylib to compile to wasm32. Add the following to your \
+            "crate-type must be cdylib or bin to compile to wasm32. Add the following to your \
              Cargo.toml file:\n\n\
              [lib]\n\
-             crate-type = [\"cdylib\", \"rlib\"]"
+             crate-type = [\"cdylib\", \"rlib\"]\n\
+             or\n\
+             [[bin]]"
         )
     }
 

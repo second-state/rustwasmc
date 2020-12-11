@@ -237,6 +237,7 @@ impl Build {
             step_create_dir,
             step_copy_readme,
             step_copy_license,
+            step_copy_wasm,
             step_install_wasm_bindgen,
             step_run_wasm_bindgen,
             step_run_wasm_opt,
@@ -256,13 +257,16 @@ impl Build {
 
     fn step_check_crate_config(&mut self) -> Result<(), Error> {
         info!("Checking crate configuration...");
-        self.crate_data.check_crate_config()?;
 
-        // ssvm only support wasm-bindgen 0.2.61
-        let lockfile = Lockfile::new(&self.crate_data)?;
-        let bindgen_version = lockfile.require_wasm_bindgen()?;
-        if bindgen_version != "0.2.61" {
-            bail!("Sorry, ssvmup only supports wasm-bindgen 0.2.61 at this time. Please fix your Cargo.toml to wasm-bindgen = \"=0.2.61\"")
+        // If crate type only contains [bin], which means it will only run in wasi
+        // then we don't need bindgen as well
+        if !self.crate_data.check_crate_type()? {
+            // ssvm only support wasm-bindgen 0.2.61
+            let lockfile = Lockfile::new(&self.crate_data)?;
+            let bindgen_version = lockfile.require_wasm_bindgen()?;
+            if bindgen_version != "0.2.61" {
+                bail!("Sorry, ssvmup only supports wasm-bindgen 0.2.61 at this time. Please fix your Cargo.toml to wasm-bindgen = \"=0.2.61\"")
+            }
         }
         info!("Crate is correctly configured.");
         Ok(())
@@ -325,6 +329,10 @@ impl Build {
     }
 
     fn step_install_wasm_bindgen(&mut self) -> Result<(), failure::Error> {
+        // bindgen is only needed in cdylib target
+        if self.crate_data.check_crate_type()? {
+            return Ok(());
+        }
         info!("Identifying wasm-bindgen dependency...");
         let lockfile = Lockfile::new(&self.crate_data)?;
         let bindgen_version = lockfile.require_wasm_bindgen()?;
@@ -340,7 +348,36 @@ impl Build {
         Ok(())
     }
 
+    fn step_copy_wasm(&mut self) -> Result<(), Error> {
+        // Only needed in bin target
+        if !self.crate_data.check_crate_type()? {
+            return Ok(());
+        }
+
+        let release_or_debug = match self.profile {
+            BuildProfile::Release | BuildProfile::Profiling => "release",
+            BuildProfile::Dev => "debug",
+        };
+
+        for c in self.crate_data.crate_name().iter() {
+            let wasm_path = self.crate_data
+                .target_directory()
+                .join(&self.target)
+                .join(release_or_debug)
+                .join(c.as_str())
+                .with_extension("wasm");
+            let out_wasm_path = self.out_dir.join(c.as_str()).with_extension(("wasm"));
+            fs::copy(&wasm_path, &out_wasm_path)?;
+        }
+
+        Ok(())
+    }
+
     fn step_run_wasm_bindgen(&mut self) -> Result<(), Error> {
+        // bindgen is only needed in cdylib target
+        if self.crate_data.check_crate_type()? {
+            return Ok(());
+        }
         info!("Building the wasm bindings...");
         bindgen::wasm_bindgen_build(
             &self.crate_data,
