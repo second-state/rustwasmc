@@ -38,6 +38,18 @@ To build [Rust functions for Node.js](/articles/getting-started-with-rust-functi
 $ ssvmup build
 ```
 
+In most cases, you will want to enable AOT optimization in order to improve performance.
+
+```
+$ ssvmup build --enable-aot
+```
+
+If you would like to use SSVM's extended WASI APIs including the Tensorflow WASI, enable the extensions. Make sure that you install the `ssvm-extensions` NPM module in this case.
+
+```
+$ ssvmup build --enable-aot --enable-ext
+```
+
 To build Rust functions for Deno applications, use the following command. See a [template application](https://github.com/second-state/ssvm-deno-starter).
 
 ```
