@@ -32,7 +32,7 @@ npm i -g ssvmup
 
 ## Usage
 
-To build [Rust functions for Node.js](/articles/getting-started-with-rust-function) applications, use the following command. See a [template application](https://github.com/second-state/ssvm-nodejs-starter). The ssvmup compiles and generates the wasm file, and the corresponding JavaScript file to call wasm functions from JavaScript.
+To build [Rust functions for Node.js](/articles/getting-started-with-rust-function) applications, use the following command. See a [template application](https://github.com/second-state/ssvm-nodejs-starter). The ssvmup compiles and generates the wasm file, and the corresponding JavaScript file to call wasm functions from JavaScript. If the rust package contains only binary crate(s) and there are no library crate, the build command will only generate the wasm(wasi) file for running with ssvm.
 
 ```
 $ ssvmup build
@@ -54,6 +54,17 @@ To build Rust functions for Deno applications, use the following command. See a 
 
 ```
 $ ssvmup build --target deno
+```
+
+By default, ssvmup will generate a directory for it's build output called pkg. If you'd like to customize this you can use the --out-dir flag.
+
+```
+$ ssvmup build --out-dir out
+```
+
+Use clean subcommand to remove pkg and target directories.
+```
+$ ssvmup clean
 ```
 
 ## Logging
