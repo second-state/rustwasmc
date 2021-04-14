@@ -16,9 +16,9 @@ pub fn check_rustc_version() -> Result<String, Error> {
     let local_minor_version = rustc_minor_version();
     match local_minor_version {
         Some(mv) => {
-            if mv < 30 {
+            if mv < 30 || mv > 50 {
                 bail!(
-                    "Your version of Rust, '1.{}', is not supported. Please install Rust version 1.30.0 or higher.",
+                    "Your version of Rust, '1.{}', is not supported. Please install Rust version higher than 1.30.0 and lower than 1.50.0",
                     mv.to_string()
                 )
             } else {

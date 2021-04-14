@@ -366,7 +366,7 @@ impl Build {
                 .join(release_or_debug)
                 .join(c.as_str())
                 .with_extension("wasm");
-            let out_wasm_path = self.out_dir.join(c.as_str()).with_extension(("wasm"));
+            let out_wasm_path = self.out_dir.join(c.as_str()).with_extension("wasm");
             fs::copy(&wasm_path, &out_wasm_path)?;
         }
 
