@@ -27,7 +27,7 @@ curl https://raw.githubusercontent.com/second-state/ssvmup/master/installer/init
 From NPM and Node.js
 
 ```
-npm i -g ssvmup
+$ npm install -g ssvmup # Append --unsafe-perm if permission denied
 ```
 
 ## Usage
