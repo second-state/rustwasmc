@@ -10,12 +10,12 @@
 # except according to those terms.
 
 # This is just a little script that can be downloaded from the internet to
-# install ssvmup. It just does platform detection, downloads the installer
+# install rustwasmc. It just does platform detection, downloads the installer
 # and runs it.
 
 set -u
 
-UPDATE_ROOT="https://github.com/second-state/ssvmup/releases/download/v0.1.21"
+UPDATE_ROOT="https://github.com/second-state/rustwasmc/releases/download/v0.1.21"
 
 main() {
     downloader --check
@@ -43,35 +43,35 @@ main() {
     which rustup > /dev/null 2>&1
     need_ok "failed to find Rust installation, is rustup installed?"
     local _rustup=`which rustup`
-    local _tardir="ssvmup-v0.1.21-${_arch}"
+    local _tardir="rustwasmc-v0.1.21-${_arch}"
     local _url="$UPDATE_ROOT/${_tardir}.tar.gz"
-    local _dir="$(mktemp -d 2>/dev/null || ensure mktemp -d -t ssvmup)"
+    local _dir="$(mktemp -d 2>/dev/null || ensure mktemp -d -t rustwasmc)"
     local _file="$_dir/input.tar.gz"
-    local _ssvmup="$_dir/ssvmup$_ext"
-    local _ssvmupinit="$_dir/ssvmup-init$_ext"
+    local _rustwasmc="$_dir/rustwasmc$_ext"
+    local _rustwasmcinit="$_dir/rustwasmc-init$_ext"
 
-    printf '%s\n' 'info: downloading ssvmup' 1>&2
+    printf '%s\n' 'info: downloading rustwasmc' 1>&2
 
     ensure mkdir -p "$_dir"
     downloader "$_url" "$_file"
     if [ $? != 0 ]; then
       say "failed to download $_url"
       say "this may be a standard network error, but it may also indicate"
-      say "that ssvmup's release process is not working. When in doubt"
+      say "that rustwasmc's release process is not working. When in doubt"
       say "please feel free to open an issue!"
       exit 1
     fi
     ensure tar xf "$_file" --strip-components 1 -C "$_dir"
-    mv "$_ssvmup" "$_ssvmupinit"
+    mv "$_rustwasmc" "$_rustwasmcinit"
 
     # The installer may want to ask for confirmation on stdin for various
     # operations. We were piped through `sh` though so we probably don't have
     # access to a tty naturally. If it looks like we're attached to a terminal
     # (`-t 1`) then pass the tty down to the installer explicitly.
     if [ -t 1 ]; then
-      "$_ssvmupinit" "$@" < /dev/tty
+      "$_rustwasmcinit" "$@" < /dev/tty
     else
-      "$_ssvmupinit" "$@"
+      "$_rustwasmcinit" "$@"
     fi
 
     local _retval=$?
@@ -130,7 +130,7 @@ get_architecture() {
 }
 
 say() {
-    echo "ssvmup-init: $1"
+    echo "rustwasmc-init: $1"
 }
 
 err() {

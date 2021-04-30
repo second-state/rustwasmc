@@ -6,7 +6,7 @@ use std::sync::atomic::{AtomicBool, AtomicU8, Ordering};
 
 #[repr(u8)]
 #[derive(Debug, Clone, Copy)]
-/// The maximum log level for ssvmup
+/// The maximum log level for rustwasmc
 // The ordering is important: the least verbose must be at
 // the top and the most verbose at the bottom
 pub enum LogLevel {
@@ -65,7 +65,7 @@ impl ProgressOutput {
         (level as u8) <= self.log_level.load(Ordering::SeqCst)
     }
 
-    /// Sets the log level for ssvmup
+    /// Sets the log level for rustwasmc
     pub fn set_log_level(&self, log_level: LogLevel) {
         self.log_level.store(log_level as u8, Ordering::SeqCst);
     }

@@ -29,9 +29,9 @@ use strsim::levenshtein;
 use toml;
 use PBAR;
 
-const SSVMUP_METADATA_KEY: &str = "package.metadata.ssvmup";
-const SSVMUP_VERSION: Option<&'static str> = option_env!("CARGO_PKG_VERSION");
-const SSVMUP_REPO_URL: &str = "https://github.com/second-state/ssvmup";
+const RUSTWASMC_METADATA_KEY: &str = "package.metadata.rustwasmc";
+const RUSTWASMC_VERSION: Option<&'static str> = option_env!("CARGO_PKG_VERSION");
+const RUSTWASMC_REPO_URL: &str = "https://github.com/second-state/rustwasmc";
 
 /// Store for metadata learned about a crate
 pub struct CrateData {
@@ -63,59 +63,59 @@ struct CargoPackage {
 
 #[derive(Default, Deserialize)]
 struct CargoMetadata {
-    #[serde(default, rename = "ssvmup")]
-    ssvmup: CargoSsvmUp,
+    #[serde(default, rename = "rustwasmc")]
+    rustwasmc: CargoRustWasmc,
 }
 
 #[derive(Default, Deserialize)]
-struct CargoSsvmUp {
+struct CargoRustWasmc {
     #[serde(default)]
-    profile: CargoSsvmUpProfiles,
+    profile: CargoRustWasmcProfiles,
 }
 
 #[derive(Deserialize)]
-struct CargoSsvmUpProfiles {
+struct CargoRustWasmcProfiles {
     #[serde(
-        default = "CargoSsvmUpProfile::default_dev",
-        deserialize_with = "CargoSsvmUpProfile::deserialize_dev"
+        default = "CargoRustWasmcProfile::default_dev",
+        deserialize_with = "CargoRustWasmcProfile::deserialize_dev"
     )]
-    dev: CargoSsvmUpProfile,
+    dev: CargoRustWasmcProfile,
 
     #[serde(
-        default = "CargoSsvmUpProfile::default_release",
-        deserialize_with = "CargoSsvmUpProfile::deserialize_release"
+        default = "CargoRustWasmcProfile::default_release",
+        deserialize_with = "CargoRustWasmcProfile::deserialize_release"
     )]
-    release: CargoSsvmUpProfile,
+    release: CargoRustWasmcProfile,
 
     #[serde(
-        default = "CargoSsvmUpProfile::default_profiling",
-        deserialize_with = "CargoSsvmUpProfile::deserialize_profiling"
+        default = "CargoRustWasmcProfile::default_profiling",
+        deserialize_with = "CargoRustWasmcProfile::deserialize_profiling"
     )]
-    profiling: CargoSsvmUpProfile,
+    profiling: CargoRustWasmcProfile,
 }
 
-impl Default for CargoSsvmUpProfiles {
-    fn default() -> CargoSsvmUpProfiles {
-        CargoSsvmUpProfiles {
-            dev: CargoSsvmUpProfile::default_dev(),
-            release: CargoSsvmUpProfile::default_release(),
-            profiling: CargoSsvmUpProfile::default_profiling(),
+impl Default for CargoRustWasmcProfiles {
+    fn default() -> CargoRustWasmcProfiles {
+        CargoRustWasmcProfiles {
+            dev: CargoRustWasmcProfile::default_dev(),
+            release: CargoRustWasmcProfile::default_release(),
+            profiling: CargoRustWasmcProfile::default_profiling(),
         }
     }
 }
 
 /// This is where configuration goes for wasm-bindgen, wasm-opt, wasm-snip, or
-/// anything else that ssvmup runs.
+/// anything else that rustwasmc runs.
 #[derive(Default, Deserialize)]
-pub struct CargoSsvmUpProfile {
+pub struct CargoRustWasmcProfile {
     #[serde(default, rename = "wasm-bindgen")]
-    wasm_bindgen: CargoSsvmUpProfileWasmBindgen,
+    wasm_bindgen: CargoRustWasmcProfileWasmBindgen,
     #[serde(default, rename = "wasm-opt")]
-    wasm_opt: Option<CargoSsvmUpProfileWasmOpt>,
+    wasm_opt: Option<CargoRustWasmcProfileWasmOpt>,
 }
 
 #[derive(Default, Deserialize)]
-struct CargoSsvmUpProfileWasmBindgen {
+struct CargoRustWasmcProfileWasmBindgen {
     #[serde(default, rename = "debug-js-glue")]
     debug_js_glue: Option<bool>,
 
@@ -148,10 +148,10 @@ struct CrateInformation {
 }
 
 impl Crate {
-    /// Returns latest ssvmup version
-    pub fn return_ssvmup_latest_version() -> Result<Option<String>, failure::Error> {
+    /// Returns latest rustwasmc version
+    pub fn return_rustwasmc_latest_version() -> Result<Option<String>, failure::Error> {
         let current_time = chrono::offset::Local::now();
-        let old_metadata_file = Self::return_ssvmup_file();
+        let old_metadata_file = Self::return_rustwasmc_file();
 
         match old_metadata_file {
             Some(ref file_contents) => {
@@ -175,7 +175,7 @@ impl Crate {
     fn return_api_call_result(
         current_time: DateTime<offset::Local>,
     ) -> Result<String, failure::Error> {
-        let version = Self::return_latest_ssvmup_version();
+        let version = Self::return_latest_rustwasmc_version();
 
         // We always override the stamp file with the current time because we don't
         // want to hit the API all the time if it fails. It should follow the same
@@ -214,7 +214,7 @@ impl Crate {
     }
 
     /// Return stamp file where metadata is stored.
-    fn return_ssvmup_file() -> Option<String> {
+    fn return_rustwasmc_file() -> Option<String> {
         if let Ok(path) = env::current_exe() {
             if let Ok(file) = fs::read_to_string(path.with_extension("stamp")) {
                 return Some(file);
@@ -223,9 +223,9 @@ impl Crate {
         None
     }
 
-    /// Returns ssvmup latest version (if it's received) by executing check_ssvmup_latest_version function.
-    fn return_latest_ssvmup_version() -> Result<String, failure::Error> {
-        Self::check_ssvmup_latest_version().map(|crt| crt.crt.max_version)
+    /// Returns rustwasmc latest version (if it's received) by executing check_rustwasmc_latest_version function.
+    fn return_latest_rustwasmc_version() -> Result<String, failure::Error> {
+        Self::check_rustwasmc_latest_version().map(|crt| crt.crt.max_version)
     }
 
     /// Read the stamp file and return value assigned to a certain key.
@@ -238,16 +238,16 @@ impl Crate {
         created.map(|s| s.to_string())
     }
 
-    /// Call to the crates.io api and return the latest version of `ssvmup`
-    fn check_ssvmup_latest_version() -> Result<Crate, Error> {
-        let url = "https://crates.io/api/v1/crates/ssvmup";
+    /// Call to the crates.io api and return the latest version of `rustwasmc`
+    fn check_rustwasmc_latest_version() -> Result<Crate, Error> {
+        let url = "https://crates.io/api/v1/crates/rustwasmc";
 
         let mut easy = easy::Easy2::new(Collector(Vec::new()));
 
         easy.useragent(&format!(
-            "ssvmup/{} ({})",
-            SSVMUP_VERSION.unwrap_or_else(|| "unknown"),
-            SSVMUP_REPO_URL
+            "rustwasmc/{} ({})",
+            RUSTWASMC_VERSION.unwrap_or_else(|| "unknown"),
+            RUSTWASMC_REPO_URL
         ))?;
 
         easy.url(url)?;
@@ -263,7 +263,7 @@ impl Crate {
             Ok(serde_json::from_str(result.into_owned().as_str())?)
         } else {
             bail!(
-                "Received a bad HTTP status code ({}) when checking for newer ssvmup version at: {}",
+                "Received a bad HTTP status code ({}) when checking for newer rustwasmc version at: {}",
                 status_code,
                 url
             )
@@ -273,21 +273,21 @@ impl Crate {
 
 #[derive(Clone, Deserialize)]
 #[serde(untagged)]
-enum CargoSsvmUpProfileWasmOpt {
+enum CargoRustWasmcProfileWasmOpt {
     Enabled(bool),
     ExplicitArgs(Vec<String>),
 }
 
-impl Default for CargoSsvmUpProfileWasmOpt {
+impl Default for CargoRustWasmcProfileWasmOpt {
     fn default() -> Self {
-        CargoSsvmUpProfileWasmOpt::Enabled(false)
+        CargoRustWasmcProfileWasmOpt::Enabled(false)
     }
 }
 
-impl CargoSsvmUpProfile {
+impl CargoRustWasmcProfile {
     fn default_dev() -> Self {
-        CargoSsvmUpProfile {
-            wasm_bindgen: CargoSsvmUpProfileWasmBindgen {
+        CargoRustWasmcProfile {
+            wasm_bindgen: CargoRustWasmcProfileWasmBindgen {
                 debug_js_glue: Some(true),
                 demangle_name_section: Some(true),
                 dwarf_debug_info: Some(false),
@@ -297,24 +297,24 @@ impl CargoSsvmUpProfile {
     }
 
     fn default_release() -> Self {
-        CargoSsvmUpProfile {
-            wasm_bindgen: CargoSsvmUpProfileWasmBindgen {
+        CargoRustWasmcProfile {
+            wasm_bindgen: CargoRustWasmcProfileWasmBindgen {
                 debug_js_glue: Some(false),
                 demangle_name_section: Some(true),
                 dwarf_debug_info: Some(false),
             },
-            wasm_opt: Some(CargoSsvmUpProfileWasmOpt::Enabled(true)),
+            wasm_opt: Some(CargoRustWasmcProfileWasmOpt::Enabled(true)),
         }
     }
 
     fn default_profiling() -> Self {
-        CargoSsvmUpProfile {
-            wasm_bindgen: CargoSsvmUpProfileWasmBindgen {
+        CargoRustWasmcProfile {
+            wasm_bindgen: CargoRustWasmcProfileWasmBindgen {
                 debug_js_glue: Some(false),
                 demangle_name_section: Some(true),
                 dwarf_debug_info: Some(false),
             },
-            wasm_opt: Some(CargoSsvmUpProfileWasmOpt::Enabled(true)),
+            wasm_opt: Some(CargoRustWasmcProfileWasmOpt::Enabled(true)),
         }
     }
 
@@ -378,9 +378,9 @@ impl CargoSsvmUpProfile {
     /// Get this profile's configured arguments for `wasm-opt`, if enabled.
     pub fn wasm_opt_args(&self) -> Option<Vec<String>> {
         match self.wasm_opt.as_ref()? {
-            CargoSsvmUpProfileWasmOpt::Enabled(false) => None,
-            CargoSsvmUpProfileWasmOpt::Enabled(true) => Some(vec!["-O".to_string()]),
-            CargoSsvmUpProfileWasmOpt::ExplicitArgs(s) => Some(s.clone()),
+            CargoRustWasmcProfileWasmOpt::Enabled(false) => None,
+            CargoRustWasmcProfileWasmOpt::Enabled(true) => Some(vec!["-O".to_string()]),
+            CargoRustWasmcProfileWasmOpt::ExplicitArgs(s) => Some(s.clone()),
         }
     }
 }
@@ -453,8 +453,8 @@ impl CrateData {
             let path_string = path.to_string();
 
             if path_string.starts_with("package.metadata")
-                && (path_string.contains("ssvmup")
-                    || levenshtein(SSVMUP_METADATA_KEY, &path_string) <= levenshtein_threshold)
+                && (path_string.contains("rustwasmc")
+                    || levenshtein(RUSTWASMC_METADATA_KEY, &path_string) <= levenshtein_threshold)
             {
                 unused_keys.insert(path_string);
             }
@@ -479,11 +479,11 @@ impl CrateData {
     }
 
     /// Get the configured profile.
-    pub fn configured_profile(&self, profile: BuildProfile) -> &CargoSsvmUpProfile {
+    pub fn configured_profile(&self, profile: BuildProfile) -> &CargoRustWasmcProfile {
         match profile {
-            BuildProfile::Dev => &self.manifest.package.metadata.ssvmup.profile.dev,
-            BuildProfile::Profiling => &self.manifest.package.metadata.ssvmup.profile.profiling,
-            BuildProfile::Release => &self.manifest.package.metadata.ssvmup.profile.release,
+            BuildProfile::Dev => &self.manifest.package.metadata.rustwasmc.profile.dev,
+            BuildProfile::Profiling => &self.manifest.package.metadata.rustwasmc.profile.profiling,
+            BuildProfile::Release => &self.manifest.package.metadata.rustwasmc.profile.release,
         }
     }
 

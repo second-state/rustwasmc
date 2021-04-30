@@ -1,5 +1,5 @@
 {
-  "name": "ssvmup",
+  "name": "rustwasmc",
   "version": "0.1.21",
   "description": "SSVM ready tool",
   "main": "binary.js",
@@ -8,11 +8,11 @@
     "preuninstall": "node ./uninstall.js"
   },
   "bin": {
-    "ssvmup": "./run.js"
+    "rustwasmc": "./run.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/second-state/ssvmup.git"
+    "url": "git+https://github.com/second-state/rustwasmc.git"
   },
   "keywords": [
     "wasm",
@@ -25,9 +25,9 @@
   "author": "wangshishuo <wangshishuo@gmail.com>",
   "license": "MIT OR Apache-2.0",
   "bugs": {
-    "url": "https://github.com/second-state/ssvmup/issues"
+    "url": "https://github.com/second-state/rustwasmc/issues"
   },
-  "homepage": "https://github.com/second-state/ssvmup#readme",
+  "homepage": "https://github.com/second-state/rustwasmc#readme",
   "dependencies": {
     "binary-install": "0.0.1"
   }

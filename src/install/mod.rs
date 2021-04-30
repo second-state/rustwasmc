@@ -94,7 +94,7 @@ pub fn get_cli_version(tool: &Tool, path: &PathBuf) -> Result<String, failure::E
     let version = stdout.trim().split_whitespace().nth(1);
     match version {
         Some(v) => Ok(v.to_string()),
-        None => bail!("Something went wrong! We couldn't determine your version of the wasm-bindgen CLI. We were supposed to set that up for you, so it's likely not your fault! You should file an issue: https://github.com/second-state/ssvmup/issues/new?template=bug_report.md.")
+        None => bail!("Something went wrong! We couldn't determine your version of the wasm-bindgen CLI. We were supposed to set that up for you, so it's likely not your fault! You should file an issue: https://github.com/second-state/rustwasmc/issues/new?template=bug_report.md.")
     }
 }
 

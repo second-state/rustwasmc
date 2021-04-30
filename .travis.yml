@@ -24,16 +24,16 @@ install:
   - cargo build --release
 
 script:
-  - mkdir ssvmup-$TRAVIS_TAG-$ENV_NAME
-  - cp ./target/release/ssvmup ssvmup-$TRAVIS_TAG-$ENV_NAME
-  - tar -czf ssvmup-$TRAVIS_TAG-$ENV_NAME.tar.gz ssvmup-$TRAVIS_TAG-$ENV_NAME
+  - mkdir rustwasmc-$TRAVIS_TAG-$ENV_NAME
+  - cp ./target/release/rustwasmc rustwasmc-$TRAVIS_TAG-$ENV_NAME
+  - tar -czf rustwasmc-$TRAVIS_TAG-$ENV_NAME.tar.gz rustwasmc-$TRAVIS_TAG-$ENV_NAME
 
 deploy:
   - provider: releases
     overwrite: false
     cleanup: false
     token: $GITHUB_TOKEN
-    file: "ssvmup-$TRAVIS_TAG-$ENV_NAME.tar.gz"
+    file: "rustwasmc-$TRAVIS_TAG-$ENV_NAME.tar.gz"
     name: Release $TRAVIS_TAG
     edge: true
     on:

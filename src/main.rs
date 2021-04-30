@@ -7,14 +7,14 @@ extern crate failure;
 extern crate human_panic;
 extern crate log;
 extern crate structopt;
-extern crate ssvmup;
+extern crate rustwasmc;
 extern crate which;
 
 use std::env;
 use std::panic;
 use structopt::StructOpt;
-use ssvmup::{
-    command::run_ssvmup,
+use rustwasmc::{
+    command::run_rustwasmc,
     Cli, PBAR,
 };
 
@@ -42,7 +42,7 @@ fn run() -> Result<(), failure::Error> {
             .file_stem()
             .and_then(|s| s.to_str())
             .expect("executable should have a filename")
-            .starts_with("ssvmup-init")
+            .starts_with("rustwasmc-init")
         {
             installer::install();
         }
@@ -56,7 +56,7 @@ fn run() -> Result<(), failure::Error> {
         PBAR.set_quiet(true);
     }
 
-    run_ssvmup(args.cmd)?;
+    run_rustwasmc(args.cmd)?;
 
     Ok(())
 }

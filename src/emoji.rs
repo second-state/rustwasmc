@@ -1,4 +1,4 @@
-//! Emoji contants used by `ssvmup`.
+//! Emoji contants used by `rustwasmc`.
 //!
 //! For the woefully unfamiliar:
 //!

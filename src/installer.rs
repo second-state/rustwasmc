@@ -1,9 +1,9 @@
-//! Self-installation of `ssvmup`
+//! Self-installation of `rustwasmc`
 //!
 //! This module contains one public function which will self-install the
-//! currently running executable as `ssvmup`. Our goal is to install this in
+//! currently running executable as `rustwasmc`. Our goal is to install this in
 //! a place that's already in `PATH`, ideally in an idiomatic location. To that
-//! end we place `ssvmup` next to the `rustup` executable in `PATH`.
+//! end we place `rustwasmc` next to the `rustup` executable in `PATH`.
 //!
 //! This installer is run directly (probably by clicking on it) on Windows,
 //! meaning it will pop up a console (as we're a console app). Output goes to
@@ -64,7 +64,7 @@ fn do_install() -> Result<(), failure::Error> {
         None => bail!("can't install when `rustup` is at the root of the filesystem"),
     };
     let destination = installation_dir
-        .join("ssvmup")
+        .join("rustwasmc")
         .with_extension(env::consts::EXE_EXTENSION);
 
     if destination.exists() {
@@ -76,7 +76,7 @@ fn do_install() -> Result<(), failure::Error> {
     fs::copy(&me, &destination)
         .with_context(|_| format!("failed to copy executable to `{}`", destination.display()))?;
     println!(
-        "info: successfully installed ssvmup to `{}`",
+        "info: successfully installed rustwasmc to `{}`",
         destination.display()
     );
 
@@ -95,7 +95,7 @@ fn confirm_can_overwrite(dst: &Path) -> Result<(), failure::Error> {
     // nothing to do except inform the user about the `-f` flag.
     if !atty::is(atty::Stream::Stdin) {
         bail!(
-            "existing ssvmup installation found at `{}`, pass `-f` to \
+            "existing rustwasmc installation found at `{}`, pass `-f` to \
              force installation over this file, otherwise aborting \
              installation now",
             dst.display()
@@ -105,7 +105,7 @@ fn confirm_can_overwrite(dst: &Path) -> Result<(), failure::Error> {
     // It looks like we're at an interactive prompt, so ask the user if they'd
     // like to overwrite the previous installation.
     eprintln!(
-        "info: existing ssvmup installation found at `{}`",
+        "info: existing rustwasmc installation found at `{}`",
         dst.display()
     );
     eprint!("info: would you like to overwrite this file? [y/N]: ");

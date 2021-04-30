@@ -1,6 +1,6 @@
-//! Information about the target ssvmup is currently being compiled for.
+//! Information about the target rustwasmc is currently being compiled for.
 //!
-//! That is, whether we are building ssvmup for windows vs linux, and x86 vs
+//! That is, whether we are building rustwasmc for windows vs linux, and x86 vs
 //! x86-64, etc.
 
 #![allow(missing_docs)]

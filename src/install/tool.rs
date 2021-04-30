@@ -1,6 +1,6 @@
 use std::fmt;
 
-/// Represents the set of CLI tools ssvmup uses
+/// Represents the set of CLI tools rustwasmc uses
 pub enum Tool {
     /// cargo-generate CLI tool
     CargoGenerate,

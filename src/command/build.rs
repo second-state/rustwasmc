@@ -1,4 +1,4 @@
-//! Implementation of the `ssvmup build` command.
+//! Implementation of the `rustwasmc build` command.
 
 use crate::wasm_opt;
 use crate::ssvmc;
@@ -20,7 +20,7 @@ use std::path::PathBuf;
 use std::time::Instant;
 use PBAR;
 
-/// Everything required to configure and run the `ssvmup build` command.
+/// Everything required to configure and run the `rustwasmc build` command.
 #[allow(missing_docs)]
 pub struct Build {
     pub crate_path: PathBuf,
@@ -52,7 +52,7 @@ pub enum BuildProfile {
     Profiling,
 }
 
-/// Everything required to configure and run the `ssvmup build` command.
+/// Everything required to configure and run the `rustwasmc build` command.
 #[derive(Debug, StructOpt)]
 pub struct BuildOptions {
     /// The path to the Rust crate. If not set, searches up the path from the current directory.
@@ -162,7 +162,7 @@ impl Build {
             out_dir,
             out_name: build_opts.out_name,
             bindgen: None,
-            cache: cache::get_ssvmup_cache()?,
+            cache: cache::get_rustwasmc_cache()?,
             extra_options: build_opts.extra_options,
         })
     }
@@ -265,7 +265,7 @@ impl Build {
             let lockfile = Lockfile::new(&self.crate_data)?;
             let bindgen_version = lockfile.require_wasm_bindgen()?;
             if bindgen_version != "0.2.61" {
-                bail!("Sorry, ssvmup only supports wasm-bindgen 0.2.61 at this time. Please fix your Cargo.toml to wasm-bindgen = \"=0.2.61\"")
+                bail!("Sorry, rustwasmc only supports wasm-bindgen 0.2.61 at this time. Please fix your Cargo.toml to wasm-bindgen = \"=0.2.61\"")
             }
         }
         info!("Crate is correctly configured.");

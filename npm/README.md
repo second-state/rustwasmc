@@ -1,6 +1,6 @@
 <div align="center">
 
-  <h1>SsvmUp</h1>
+  <h1>rustwasmc</h1>
 
   <p>
     <strong>SSVM ready tool</strong>
@@ -22,7 +22,7 @@ Most of the code for this project comes from [wasm-pack].
 
 ## Install
 
-curl https://raw.githubusercontent.com/second-state/ssvmup/master/installer/init.sh -sSf | sh
+curl https://raw.githubusercontent.com/second-state/rustwasmc/master/installer/init.sh -sSf | sh
 
 ## Commands
 
@@ -30,12 +30,12 @@ curl https://raw.githubusercontent.com/second-state/ssvmup/master/installer/init
 
 ## Logging
 
-`ssvmup` uses [`env_logger`] to produce logs when `ssvmup` runs.
+`rustwasmc` uses [`env_logger`] to produce logs when `rustwasmc` runs.
 
 To configure your log level, use the `RUST_LOG` environment variable. For example:
 
 ```
-RUST_LOG=info ssvmup build
+RUST_LOG=info rustwasmc build
 ```
 
 [`env_logger`]: https://crates.io/crates/env_logger

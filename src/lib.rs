@@ -63,6 +63,6 @@ pub struct Cli {
     pub quiet: bool,
 
     #[structopt(long = "log-level", default_value = "info")]
-    /// The maximum level of messages that should be logged by ssvmup. [possible values: info, warn, error]
+    /// The maximum level of messages that should be logged by rustwasmc. [possible values: info, warn, error]
     pub log_level: LogLevel,
 }

@@ -1632,6 +1632,45 @@ dependencies = [
 ]
 
 [[package]]
+name = "rustwasmc"
+version = "0.1.21"
+dependencies = [
+ "assert_cmd",
+ "atty",
+ "binary-install",
+ "cargo_metadata",
+ "chrono",
+ "console 0.6.2",
+ "curl",
+ "dialoguer",
+ "dirs",
+ "env_logger",
+ "failure",
+ "glob",
+ "human-panic",
+ "lazy_static 1.4.0",
+ "log",
+ "openssl",
+ "parking_lot 0.6.4",
+ "predicates",
+ "reqwest",
+ "semver",
+ "serde",
+ "serde_derive",
+ "serde_ignored",
+ "serde_json",
+ "serial_test",
+ "serial_test_derive",
+ "siphasher",
+ "strsim",
+ "structopt",
+ "tempfile 3.1.0",
+ "toml",
+ "walkdir",
+ "which",
+]
+
+[[package]]
 name = "ryu"
 version = "1.0.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1814,45 +1853,6 @@ dependencies = [
  "libc",
  "redox_syscall",
  "winapi 0.3.8",
-]
-
-[[package]]
-name = "ssvmup"
-version = "0.1.21"
-dependencies = [
- "assert_cmd",
- "atty",
- "binary-install",
- "cargo_metadata",
- "chrono",
- "console 0.6.2",
- "curl",
- "dialoguer",
- "dirs",
- "env_logger",
- "failure",
- "glob",
- "human-panic",
- "lazy_static 1.4.0",
- "log",
- "openssl",
- "parking_lot 0.6.4",
- "predicates",
- "reqwest",
- "semver",
- "serde",
- "serde_derive",
- "serde_ignored",
- "serde_json",
- "serial_test",
- "serial_test_derive",
- "siphasher",
- "strsim",
- "structopt",
- "tempfile 3.1.0",
- "toml",
- "walkdir",
- "which",
 ]
 
 [[package]]

@@ -9,7 +9,7 @@ use failure::Error;
 use log::info;
 use std::result;
 
-/// The various kinds of commands that `ssvmup` can execute.
+/// The various kinds of commands that `rustwasmc` can execute.
 #[derive(Debug, StructOpt)]
 pub enum Command {
     /// 🏗️  build your npm package!
@@ -22,7 +22,7 @@ pub enum Command {
 }
 
 /// Run a command with the given logger!
-pub fn run_ssvmup(command: Command) -> result::Result<(), Error> {
+pub fn run_rustwasmc(command: Command) -> result::Result<(), Error> {
     // Run the correct command based off input and store the result of it so that we can clear
     // the progress bar then return it
     match command {

@@ -26,7 +26,7 @@ const getBinary = () => {
   const platform = getPlatform();
   const version = require("./package.json").version;
   const author = "second-state";
-  const name = "ssvmup";
+  const name = "rustwasmc";
   const url = `https://github.com/${author}/${name}/releases/download/v${version}/${name}-v${version}-${platform}.tar.gz`;
   return new Binary(url, { name });
 };
