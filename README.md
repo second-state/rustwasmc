@@ -1,7 +1,7 @@
 <div align="center">
   <h1>rustwasmc</h1>
   <p>
-    <strong>The Second State VM ready tool</strong>
+    <strong>Rust compiler toolkit for WebAssembly apps in the WasmEdge Runtime</strong>
   </p>
 </div>
 
@@ -10,11 +10,11 @@
 ![GitHub language count](https://img.shields.io/github/languages/count/second-state/rustwasmc)
 ![GitHub top language](https://img.shields.io/github/languages/top/second-state/rustwasmc)
 
-Developers: [Getting started](https://www.secondstate.io/articles/getting-started-with-rust-function/) building Rust + JavaScript hybrid apps for Node.js using the `rustwasmc` tool.
+Developers: Getting started with the [Second State Functions](https://www.secondstate.io/articles/getting-started-with-function-as-a-service-in-rust/) (a serverless FaaS service), [Tencent Serverless Functions for AI inference](https://github.com/second-state/tencent-tensorflow-scf/blob/main/README-en.md), or [your own Node.js server](https://www.secondstate.io/articles/getting-started-with-rust-function/).
 
 ## About
 
-A one-stop tool for building Rust functions into WebAssembly (the [Second State VM, or SSVM](https://www.secondstate.io/ssvm/)) and then accessing these functions from Node.js JavaScript.
+A one-stop tool for building Rust functions into WebAssembly for deployment on the [WasmEdge Runtime](https://github.com/WasmEdge/WasmEdge). 
 
 ## Install
 
