@@ -16,12 +16,22 @@ Developers: Getting started with the [Second State Functions](https://www.second
 
 A one-stop tool for building Rust functions into WebAssembly for deployment on the [WasmEdge Runtime](https://github.com/WasmEdge/WasmEdge). 
 
+## Prerequisite
+
+You will need to install the Rust compiler in order to use `rustwasmc`. Currently, we support up to Rust 1.50.0.
+
+```
+$ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+$ source $HOME/.cargo/env
+$ rustup override set 1.50.0
+```
+
 ## Install
 
 From Linux command line
 
 ```
-curl https://raw.githubusercontent.com/second-state/rustwasmc/master/installer/init.sh -sSf | sh
+$ curl https://raw.githubusercontent.com/second-state/rustwasmc/master/installer/init.sh -sSf | sh
 ```
 
 From NPM and Node.js
@@ -74,7 +84,7 @@ $ rustwasmc clean
 To configure your log level, use the `RUST_LOG` environment variable. For example:
 
 ```
-RUST_LOG=info rustwasmc build
+$ RUST_LOG=info rustwasmc build
 ```
 
 [`env_logger`]: https://crates.io/crates/env_logger
