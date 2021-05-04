@@ -42,7 +42,7 @@ $ npm install -g rustwasmc # Append --unsafe-perm if permission denied
 
 ## Usage
 
-To build [Rust functions for Node.js](/articles/getting-started-with-rust-function) applications, use the following command. See a [template application](https://github.com/second-state/wasmedge-nodejs-starter). The `rustwasmc` compiles and generates the wasm file, and the corresponding JavaScript file to call wasm functions from JavaScript. If the rust package contains only binary crate(s) and there are no library crate, the build command will only generate the wasm(wasi) file for running with ssvm.
+To build [Rust functions for Node.js](https://www.secondstate.io/articles/getting-started-with-rust-function/) applications, use the following command. See a [template application](https://github.com/second-state/wasmedge-nodejs-starter). The `rustwasmc` compiles and generates the wasm file, and the corresponding JavaScript file to call wasm functions from JavaScript. If the rust package contains only binary crate(s) and there are no library crate, the build command will only generate the wasm(wasi) file for running with the WasmEdge VM.
 
 ```
 $ rustwasmc build
