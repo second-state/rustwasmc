@@ -1633,7 +1633,7 @@ dependencies = [
 
 [[package]]
 name = "rustwasmc"
-version = "0.1.22"
+version = "0.1.23"
 dependencies = [
  "assert_cmd",
  "atty",
