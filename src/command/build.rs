@@ -32,6 +32,7 @@ pub struct Build {
     pub target: String,
     pub enable_aot: bool,
     pub enable_ext: bool,
+    pub wasi: bool,
     pub run_target: String,
     pub out_dir: PathBuf,
     pub out_name: Option<String>,
@@ -79,6 +80,10 @@ pub struct BuildOptions {
     /// Requiring ssvm-extensions instead of ssvm
     pub enable_ext: bool,
 
+    #[structopt(long = "wasi")]
+    /// Force compiled to target wasm32-wasi
+    pub wasi: bool,
+
     #[structopt(skip = true)]
     /// By default a *.d.ts file is generated for the generated JS file, but
     /// this flag will disable generating this TypeScript file.
@@ -119,6 +124,7 @@ impl Default for BuildOptions {
             target: String::from("ssvm"),
             enable_aot: false,
             enable_ext: false,
+            wasi: false,
             disable_dts: true,
             dev: false,
             release: false,
@@ -148,6 +154,11 @@ impl Build {
             _ => bail!("Can only supply one of the --dev, --release, or --profiling flags"),
         };
 
+        let target = match build_opts.wasi {
+            true => String::from("wasm32-wasi"),
+            false => String::from("wasm32-unknown-unknown")
+        };
+
         Ok(Build {
             crate_path,
             crate_data,
@@ -155,9 +166,10 @@ impl Build {
             disable_dts: build_opts.disable_dts,
             profile,
             mode: build_opts.mode,
-            target: String::from("wasm32-wasi"),
+            target: target,
             enable_aot: build_opts.enable_aot,
             enable_ext: build_opts.enable_ext,
+            wasi: build_opts.wasi,
             run_target: build_opts.target,
             out_dir,
             out_name: build_opts.out_name,
@@ -266,6 +278,18 @@ impl Build {
             let bindgen_version = lockfile.require_wasm_bindgen()?;
             if bindgen_version != "0.2.61" {
                 bail!("Sorry, rustwasmc only supports wasm-bindgen 0.2.61 at this time. Please fix your Cargo.toml to wasm-bindgen = \"=0.2.61\"")
+            }
+
+            // wasi lib is not supported from rustc 1.51.0
+            if self.wasi {
+                let rustc_minor_version = build::check_rustc_version().unwrap();
+                if rustc_minor_version > 50 {
+                    let msg = format!(
+                        "Your version of Rust is '1.{}', which is not supported if you want to use wasi as library. We recommend to export only the main function.",
+                        rustc_minor_version
+                    );
+                    PBAR.info(&msg);
+                }
             }
         }
         info!("Crate is correctly configured.");

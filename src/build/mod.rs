@@ -12,17 +12,17 @@ use PBAR;
 pub mod wasm_target;
 
 /// Ensure that `rustc` is present and that it is >= 1.30.0
-pub fn check_rustc_version() -> Result<String, Error> {
+pub fn check_rustc_version() -> Result<u32, Error> {
     let local_minor_version = rustc_minor_version();
     match local_minor_version {
         Some(mv) => {
-            if mv < 30 || mv > 50 {
+            if mv < 30 {
                 bail!(
-                    "Your version of Rust, '1.{}', is not supported. Please install Rust version higher than 1.30.0 and lower than 1.50.0",
+                    "Your version of Rust, '1.{}', is not supported. Please install Rust version 1.30.0 or higher.",
                     mv.to_string()
                 )
             } else {
-                Ok(mv.to_string())
+                Ok(mv)
             }
         }
         None => bail!("We can't figure out what your Rust version is- which means you might not have Rust installed. Please install Rust version 1.30.0 or higher."),
@@ -48,7 +48,7 @@ fn rustc_minor_version() -> Option<u32> {
     otry!(pieces.next()).parse().ok()
 }
 
-/// Run `cargo build` targetting `wasm32-wasi`.
+/// Run `cargo build`.
 pub fn cargo_build_wasm(
     path: &Path,
     profile: BuildProfile,
@@ -89,7 +89,7 @@ pub fn cargo_build_wasm(
     Ok(())
 }
 
-/// Run `cargo build --tests` targetting `wasm32-wasi`.
+/// Run `cargo build --tests` targetting `wasm32-unknown-unknown`.
 ///
 /// This generates the `Cargo.lock` file that we use in order to know which version of
 /// wasm-bindgen-cli to use when running tests.
@@ -106,7 +106,7 @@ pub fn cargo_build_wasm_tests(path: &Path, debug: bool) -> Result<(), Error> {
         cmd.arg("--release");
     }
 
-    cmd.arg("--target").arg("wasm32-wasi");
+    cmd.arg("--target").arg("wasm32-known-known");
 
     child::run(cmd, "cargo build").context("Compilation of your program failed")?;
     Ok(())
