@@ -271,8 +271,11 @@ impl Build {
         info!("Checking crate configuration...");
 
         // If crate type only contains [bin], which means it will only run in wasi
-        // then we don't need bindgen as well
-        if !self.crate_data.check_crate_type()? {
+        // then the target will be forced set to wasm32-wasi
+        // and we don't need bindgen as well
+        if self.crate_data.check_crate_type()? {
+            self.target = String::from("wasm32-wasi");
+        } else {
             // ssvm only support wasm-bindgen 0.2.61
             let lockfile = Lockfile::new(&self.crate_data)?;
             let bindgen_version = lockfile.require_wasm_bindgen()?;
