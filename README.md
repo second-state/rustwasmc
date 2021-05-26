@@ -59,12 +59,6 @@ If you would like to use WasmEdge's extended APIs including Tensorflow, enable t
 $ rustwasmc build --enable-aot --enable-ext
 ```
 
-By default, `rustwasmc` generates `wasm32` bytecode for library functions and `wasm32-wasi` bytecode for `main()` command programs. The `wasm32-wasi` bytecode allows Rust source code to access OS features such as file system, environment variables, and command line options. However, you can also force `rustwasmc` to generate `wasm32-wasi` bytecode in all cases by passing the `--wasi` flag.
-
-```
-$ rustwasmc build --wasi
-```
-
 To build Rust functions for Deno applications, use the following command. See a [template application](https://github.com/second-state/ssvm-deno-starter).
 
 ```
