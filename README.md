@@ -88,6 +88,10 @@ $ RUST_LOG=info rustwasmc build
 
 [`env_logger`]: https://crates.io/crates/env_logger
 
+## Known issues
+
+For Rust version 1.51 and above, `rustwasmc` generates bytecode without WASI support. That means programs that access the file system, date and time, environment variables, and command line arguments would *fail* on Rust 1.50+. This should not affect most application use cases. We are working on a solution.
+
 ## Acknowledgment
 
 This project is derived from the open source [wasm-pack].
