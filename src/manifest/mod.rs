@@ -527,7 +527,13 @@ impl CrateData {
             .targets
             .iter()
             .filter(|t| t.kind.iter().any(|k| k == "cdylib" || k == "bin"))
-            .map(|t| t.name.replace("-", "_"))
+            .map(|t| {
+                if t.kind.iter().any(|k| k == "bin") {
+                    t.name.clone()
+                } else {
+                    t.name.replace("-", "_")
+                }
+            })
             .collect();
     }
 
