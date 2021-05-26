@@ -23,7 +23,6 @@ You will need to install the Rust compiler in order to use `rustwasmc`. Currentl
 ```
 $ curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 $ source $HOME/.cargo/env
-$ rustup override set 1.50.0
 ```
 
 ## Install
@@ -42,7 +41,7 @@ $ npm install -g rustwasmc # Append --unsafe-perm if permission denied
 
 ## Usage
 
-To build [Rust functions for Node.js](https://www.secondstate.io/articles/getting-started-with-rust-function/) applications, use the following command. See a [template application](https://github.com/second-state/wasmedge-nodejs-starter). The `rustwasmc` compiles and generates the wasm file, and the corresponding JavaScript file to call wasm functions from JavaScript. If the rust package contains only binary crate(s) and there are no library crate, the build command will only generate the wasm(wasi) file for running with the WasmEdge VM.
+To build [Rust functions for Node.js](https://www.secondstate.io/articles/getting-started-with-rust-function/) applications, use the following command. See a [template application](https://github.com/second-state/wasmedge-nodejs-starter). The `rustwasmc` compiles and generates the wasm file, and the corresponding JavaScript file to call wasm functions from JavaScript. If the rust package contains only binary crate(s) and there are no library crate, the build command will only generate a `wasm-wasi` file for running as a standalone command program in the WasmEdge VM.
 
 ```
 $ rustwasmc build
@@ -54,10 +53,16 @@ In most cases, you will want to enable AOT optimization in order to improve perf
 $ rustwasmc build --enable-aot
 ```
 
-If you would like to use WasmEdge's extended WASI APIs including the Tensorflow WASI, enable the extensions. Make sure that you install the `wasmedge-extensions` NPM module in this case.
+If you would like to use WasmEdge's extended APIs including Tensorflow, enable the extensions. Make sure that you install the `wasmedge-extensions` NPM module in this case.
 
 ```
 $ rustwasmc build --enable-aot --enable-ext
+```
+
+By default, `rustwasmc` generates `wasm32` bytecode for library functions and `wasm32-wasi` bytecode for `main()` command programs. The `wasm32-wasi` bytecode allows Rust source code to access OS features such as file system, environment variables, and command line options. However, you can also force `rustwasmc` to generate `wasm32-wasi` bytecode in all cases by passing the `--wasi` flag.
+
+```
+$ rustwasmc build --wasi
 ```
 
 To build Rust functions for Deno applications, use the following command. See a [template application](https://github.com/second-state/ssvm-deno-starter).
