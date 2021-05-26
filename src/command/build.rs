@@ -32,7 +32,6 @@ pub struct Build {
     pub target: String,
     pub enable_aot: bool,
     pub enable_ext: bool,
-    pub wasi: bool,
     pub run_target: String,
     pub out_dir: PathBuf,
     pub out_name: Option<String>,
@@ -80,10 +79,6 @@ pub struct BuildOptions {
     /// Requiring ssvm-extensions instead of ssvm
     pub enable_ext: bool,
 
-    #[structopt(long = "wasi")]
-    /// Force compiled to target wasm32-wasi
-    pub wasi: bool,
-
     #[structopt(skip = true)]
     /// By default a *.d.ts file is generated for the generated JS file, but
     /// this flag will disable generating this TypeScript file.
@@ -124,7 +119,6 @@ impl Default for BuildOptions {
             target: String::from("ssvm"),
             enable_aot: false,
             enable_ext: false,
-            wasi: false,
             disable_dts: true,
             dev: false,
             release: false,
@@ -154,10 +148,7 @@ impl Build {
             _ => bail!("Can only supply one of the --dev, --release, or --profiling flags"),
         };
 
-        let target = match build_opts.wasi {
-            true => String::from("wasm32-wasi"),
-            false => String::from("wasm32-unknown-unknown")
-        };
+        let target = String::from("wasm32-wasi");
 
         Ok(Build {
             crate_path,
@@ -169,7 +160,6 @@ impl Build {
             target: target,
             enable_aot: build_opts.enable_aot,
             enable_ext: build_opts.enable_ext,
-            wasi: build_opts.wasi,
             run_target: build_opts.target,
             out_dir,
             out_name: build_opts.out_name,
@@ -271,11 +261,8 @@ impl Build {
         info!("Checking crate configuration...");
 
         // If crate type only contains [bin], which means it will only run in wasi
-        // then the target will be forced set to wasm32-wasi
-        // and we don't need bindgen as well
-        if self.crate_data.check_crate_type()? {
-            self.target = String::from("wasm32-wasi");
-        } else {
+        // then we don't need bindgen as well
+        if !self.crate_data.check_crate_type()? {
             // ssvm only support wasm-bindgen 0.2.61
             let lockfile = Lockfile::new(&self.crate_data)?;
             let bindgen_version = lockfile.require_wasm_bindgen()?;
@@ -284,15 +271,15 @@ impl Build {
             }
 
             // wasi lib is not supported from rustc 1.51.0
-            if self.wasi {
-                let rustc_minor_version = build::check_rustc_version().unwrap();
-                if rustc_minor_version > 50 {
-                    let msg = format!(
-                        "Your version of Rust is '1.{}', which is not supported if you want to use wasi as library. We recommend to export only the main function.",
-                        rustc_minor_version
-                    );
-                    PBAR.info(&msg);
-                }
+            // os change target to wasm32-unknown-unknown
+            let rustc_minor_version = build::check_rustc_version().unwrap();
+            if rustc_minor_version > 50 {
+                self.target = String::from("wasm32-unknown-unknown");
+                let msg = format!(
+                    "Your version of Rust is '1.{}', which is not supported if you want to use wasi as library. So the target has been changed to wasm32-unknown-unknown. We recommend to export only the main function.",
+                    rustc_minor_version
+                );
+                PBAR.info(&msg);
             }
         }
         info!("Crate is correctly configured.");
