@@ -1,7 +1,7 @@
 //! Implementation of the `rustwasmc build` command.
 
 use crate::wasm_opt;
-use crate::ssvmc;
+use crate::wasmedgec;
 use binary_install::{Cache, Download};
 use bindgen;
 use build;
@@ -243,7 +243,7 @@ impl Build {
             step_install_wasm_bindgen,
             step_run_wasm_bindgen,
             step_run_wasm_opt,
-            step_run_ssvmc,
+            step_run_wasmedgec,
             step_create_json,
         ]);
         steps
@@ -431,11 +431,11 @@ impl Build {
         })
     }
 
-    fn step_run_ssvmc(&mut self) -> Result<(), Error> {
+    fn step_run_wasmedgec(&mut self) -> Result<(), Error> {
         if !self.enable_aot {
             return Ok(())
         }
-        ssvmc::run(
+        wasmedgec::run(
             &self.cache,
             &self.out_dir,
             self.mode.install_permitted(),
