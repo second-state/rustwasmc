@@ -32,6 +32,7 @@ pub struct Build {
     pub target: String,
     pub enable_aot: bool,
     pub enable_ext: bool,
+    pub no_wasi: bool,
     pub run_target: String,
     pub out_dir: PathBuf,
     pub out_name: Option<String>,
@@ -79,6 +80,10 @@ pub struct BuildOptions {
     /// Requiring ssvm-extensions instead of ssvm
     pub enable_ext: bool,
 
+    #[structopt(long = "no-wasi")]
+    /// Force compiled to target wasm32-unknown-unknown
+    pub no_wasi: bool,
+
     #[structopt(skip = true)]
     /// By default a *.d.ts file is generated for the generated JS file, but
     /// this flag will disable generating this TypeScript file.
@@ -119,6 +124,7 @@ impl Default for BuildOptions {
             target: String::from("ssvm"),
             enable_aot: false,
             enable_ext: false,
+            no_wasi: false,
             disable_dts: true,
             dev: false,
             release: false,
@@ -148,7 +154,10 @@ impl Build {
             _ => bail!("Can only supply one of the --dev, --release, or --profiling flags"),
         };
 
-        let target = String::from("wasm32-wasi");
+        let target = match build_opts.no_wasi {
+            true => String::from("wasm32-unknown-unknown"),
+            false => String::from("wasm32-wasi")
+        };
 
         Ok(Build {
             crate_path,
@@ -160,6 +169,7 @@ impl Build {
             target: target,
             enable_aot: build_opts.enable_aot,
             enable_ext: build_opts.enable_ext,
+            no_wasi: build_opts.no_wasi,
             run_target: build_opts.target,
             out_dir,
             out_name: build_opts.out_name,
@@ -271,15 +281,13 @@ impl Build {
             }
 
             // wasi lib is not supported from rustc 1.51.0
-            // os change target to wasm32-unknown-unknown
             let rustc_minor_version = build::check_rustc_version().unwrap();
-            if rustc_minor_version > 50 {
-                self.target = String::from("wasm32-unknown-unknown");
-                let msg = format!(
-                    "Your version of Rust is '1.{}', which is not supported if you want to use wasi as library. So the target has been changed to wasm32-unknown-unknown. We recommend to export only the main function.",
-                    rustc_minor_version
+            if rustc_minor_version > 50 && self.target == String::from("wasm32-wasi") {
+                bail!(
+                    r#"At this time, we can only support Rust compiler version 1.50 and below in order to support WASI features in WasmEdge. Please use this command to set Rust version:
+$ rustup override set 1.50.0
+If you do not need WASI features, you can use the —no-wasi flag to override this behavior. See more here: https://github.com/WasmEdge/WasmEdge/issues/264"#
                 );
-                PBAR.info(&msg);
             }
         }
         info!("Crate is correctly configured.");
