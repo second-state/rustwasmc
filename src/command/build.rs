@@ -68,16 +68,16 @@ pub struct BuildOptions {
     /// Sets steps to be run. [possible values: no-install, normal, force]
     pub mode: InstallMode,
 
-    #[structopt(long = "target", default_value = "ssvm")]
-    /// Sets the runtime target. [possible values: ssvm(default), nodejs, deno].
+    #[structopt(long = "target", default_value = "wasmedge")]
+    /// Sets the runtime target. [possible values: wasmedge(default), nodejs, deno].
     pub target: String,
 
     #[structopt(long = "enable-aot")]
-    /// Enable AOT in SSVM
+    /// Enable AOT in WasmEdge
     pub enable_aot: bool,
 
     #[structopt(long = "enable-ext")]
-    /// Requiring ssvm-extensions instead of ssvm
+    /// Requiring wasmedge-extensions instead of wasmedge
     pub enable_ext: bool,
 
     #[structopt(long = "no-wasi")]
@@ -121,7 +121,7 @@ impl Default for BuildOptions {
             path: None,
             scope: None,
             mode: InstallMode::default(),
-            target: String::from("ssvm"),
+            target: String::from("wasmedge"),
             enable_aot: false,
             enable_ext: false,
             no_wasi: false,
@@ -273,7 +273,7 @@ impl Build {
         // If crate type only contains [bin], which means it will only run in wasi
         // then we don't need bindgen as well
         if !self.crate_data.check_crate_type()? {
-            // ssvm only support wasm-bindgen 0.2.61
+            // wasmedge only support wasm-bindgen 0.2.61
             let lockfile = Lockfile::new(&self.crate_data)?;
             let bindgen_version = lockfile.require_wasm_bindgen()?;
             if bindgen_version != "0.2.61" {

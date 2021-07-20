@@ -200,7 +200,7 @@ fn get_ssvm_ver(bindgen_semver: &str) -> Result<String, failure::Error> {
     let vers: Value = serde_json::from_str(&vers).unwrap();
     match &vers[bindgen_semver] {
         Value::String(sv) => Ok(sv.to_string()),
-        _ => bail!("no ssvm mapping for bindgen {}", bindgen_semver)
+        _ => bail!("no wasmedge mapping for bindgen {}", bindgen_semver)
     }
 }
 

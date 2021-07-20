@@ -81,7 +81,7 @@ pub fn find_wasmedgec(cache: &Cache, install_permitted: bool) -> Result<SsvmcOpt
     };
     let url = format!(
         "https://github.com/WasmEdge/WasmEdge/releases/download/{vers}/WasmEdge-{vers}-manylinux2014_x86_64.tar.gz",
-        vers = "0.8.0",
+        vers = "0.8.1",
     );
 
     let download = |permit_install| cache.download(permit_install, "wasmedgec", &["wasmedgec"], &url);

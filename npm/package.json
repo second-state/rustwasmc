@@ -1,7 +1,7 @@
 {
   "name": "rustwasmc",
   "version": "0.1.28",
-  "description": "SSVM ready tool",
+  "description": "WasmEdge ready tool",
   "main": "binary.js",
   "scripts": {
     "postinstall": "node ./install.js",

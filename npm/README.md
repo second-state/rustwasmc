@@ -3,16 +3,16 @@
   <h1>rustwasmc</h1>
 
   <p>
-    <strong>SSVM ready tool</strong>
+    <strong>WasmEdge ready tool</strong>
   </p>
 </div>
 
 ## About
 
 This tool seeks to be a one-stop shop for building and working with rust-
-generated WebAssembly that you would like to interop with JavaScript in [SSVM].
+generated WebAssembly that you would like to interop with JavaScript in [WasmEdge].
 
-[SSVM]: https://github.com/second-state/SSVM
+[WasmEdge]: https://github.com/WasmEdge/WasmEdge
 
 ## Acknowledgment
 

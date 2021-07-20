@@ -31,7 +31,7 @@ pub fn run_rustwasmc(command: Command) -> result::Result<(), Error> {
             // Check rust toolchain first
             let o = std::process::Command::new("rustc").arg("--version").output();
             match o {
-                Err(_e) => bail!("Please follow instructions to install Rust language tools first. https://www.secondstate.io/articles/ssvmup/ Thank you."),
+                Err(_e) => bail!("Please follow instructions to install Rust language tools first. https://www.secondstate.io/articles/rustwasmc/ Thank you."),
                 _ => {}
             }
             Build::try_from_opts(build_opts).and_then(|mut b| b.run())

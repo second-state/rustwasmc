@@ -1,4 +1,4 @@
-//! Your favorite rust -> ssvm workflow tool!
+//! Your favorite rust -> wasmedge workflow tool!
 
 #![deny(missing_docs)]
 
