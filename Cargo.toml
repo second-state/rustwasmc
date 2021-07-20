@@ -1,6 +1,6 @@
 [package]
 name = "rustwasmc"
-version = "0.1.28"
+version = "0.1.29"
 authors = ["wangshishuo"]
 repository = "https://github.com/second-state/rustwasmc.git"
 license = "MIT/Apache-2.0"
