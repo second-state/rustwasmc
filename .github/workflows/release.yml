@@ -1,0 +1,63 @@
+name: release
+on: 
+  push:
+    tags:
+      - '*'
+jobs:
+  build:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+
+        include:
+          - os: macos-latest
+            TARGET: x86_64-apple-darwin
+
+          - os: ubuntu-latest
+            TARGET: x86_64-unknown-linux-gnu
+
+          - os: windows-latest
+            TARGET: x86_64-pc-windows-msvc
+            EXE_SUFFIX: .exe
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Install Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          profile: minimal
+      - name: Get the tag name
+        shell: bash
+        id: tag_name
+        run: echo ::set-output name=version::${GITHUB_REF/refs\/tags\//}
+      - name: Build
+        shell: bash
+        run: |
+          cargo build --release
+          mkdir rustwasmc-${{ steps.tag_name.outputs.version }}-${{matrix.TARGET}}
+          cp ./target/release/rustwasmc${{matrix.EXE_SUFFIX}} rustwasmc-${{ steps.tag_name.outputs.version }}-${{matrix.TARGET}}
+          tar -czf rustwasmc-${{ steps.tag_name.outputs.version }}-${{matrix.TARGET}}.tar.gz rustwasmc-${{ steps.tag_name.outputs.version }}-${{matrix.TARGET}}
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ steps.tag_name.outputs.version }}
+          name: Release ${{ steps.tag_name.outputs.version }}
+          draft: false
+          files: rustwasmc-${{ steps.tag_name.outputs.version }}-${{matrix.TARGET}}.tar.gz
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # Setup .npmrc file to publish to npm
+      - name: Publish npm
+        if: runner.os == 'Linux'
+        uses: actions/setup-node@v2
+        with:
+          node-version: '12.x'
+          registry-url: 'https://registry.npmjs.org'
+        run: |
+          cd npm
+          npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
