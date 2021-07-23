@@ -50,12 +50,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       # Setup .npmrc file to publish to npm
-      - name: Publish npm
+      - name: Setup node
         if: runner.os == 'Linux'
         uses: actions/setup-node@v2
         with:
           node-version: '12.x'
           registry-url: 'https://registry.npmjs.org'
+      - name: Publish npm
+        if: runner.os == 'Linux'
         run: |
           cd npm
           npm publish
